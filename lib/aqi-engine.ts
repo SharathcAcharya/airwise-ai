@@ -6,68 +6,17 @@
  * Sub-index formula:
  *   I_p = [ (I_Hi - I_Lo) / (B_Hi - B_Lo) ] * (C_p - B_Lo) + I_Lo
  * 
- * Breakpoints for 24-hr averages (8-hr for CO and O3):
+ * CPCB AVERAGING PERIODS:
+ * - PM2.5, PM10, NO2, SO2, NH3: 24-hour running or daily average
+ * - CO, O3: 8-hour running average
  * 
- * PM2.5 (µg/m³):
- *   Good: 0 - 30 (AQI 0 - 50)
- *   Satisfactory: 31 - 60 (AQI 51 - 100)
- *   Moderate: 61 - 90 (AQI 101 - 200)
- *   Poor: 91 - 120 (AQI 201 - 300)
- *   Very Poor: 121 - 250 (AQI 301 - 400)
- *   Severe: 250+ (AQI 401 - 500)
- * 
- * PM10 (µg/m³):
- *   Good: 0 - 50 (AQI 0 - 50)
- *   Satisfactory: 51 - 100 (AQI 51 - 100)
- *   Moderate: 101 - 250 (AQI 101 - 200)
- *   Poor: 251 - 350 (AQI 201 - 300)
- *   Very Poor: 351 - 430 (AQI 301 - 400)
- *   Severe: 430+ (AQI 401 - 500)
- * 
- * NO2 (µg/m³):
- *   Good: 0 - 40 (AQI 0 - 50)
- *   Satisfactory: 41 - 80 (AQI 51 - 100)
- *   Moderate: 81 - 180 (AQI 101 - 200)
- *   Poor: 181 - 280 (AQI 201 - 300)
- *   Very Poor: 281 - 400 (AQI 301 - 400)
- *   Severe: 400+ (AQI 401 - 500)
- * 
- * SO2 (µg/m³):
- *   Good: 0 - 40 (AQI 0 - 50)
- *   Satisfactory: 41 - 80 (AQI 51 - 100)
- *   Moderate: 81 - 380 (AQI 101 - 200)
- *   Poor: 381 - 800 (AQI 201 - 300)
- *   Very Poor: 801 - 1600 (AQI 301 - 400)
- *   Severe: 1600+ (AQI 401 - 500)
- * 
- * CO (mg/m³) [Note: if provided in µg/m³, divide by 1000]:
- *   Good: 0.0 - 1.0 (AQI 0 - 50)
- *   Satisfactory: 1.1 - 2.0 (AQI 51 - 100)
- *   Moderate: 2.1 - 10.0 (AQI 101 - 200)
- *   Poor: 10.1 - 17.0 (AQI 201 - 300)
- *   Very Poor: 17.1 - 34.0 (AQI 301 - 400)
- *   Severe: 34.0+ (AQI 401 - 500)
- * 
- * O3 (µg/m³):
- *   Good: 0 - 50 (AQI 0 - 50)
- *   Satisfactory: 51 - 100 (AQI 51 - 100)
- *   Moderate: 101 - 168 (AQI 101 - 200)
- *   Poor: 169 - 208 (AQI 201 - 300)
- *   Very Poor: 209 - 748 (AQI 301 - 400)
- *   Severe: 748+ (AQI 401 - 500)
- * 
- * NH3 (µg/m³):
- *   Good: 0 - 200 (AQI 0 - 50)
- *   Satisfactory: 201 - 400 (AQI 51 - 100)
- *   Moderate: 401 - 800 (AQI 101 - 200)
- *   Poor: 801 - 1200 (AQI 201 - 300)
- *   Very Poor: 1201 - 1800 (AQI 301 - 400)
- *   Severe: 1800+ (AQI 401 - 500)
- * 
- * CPCB COMPOSITE AQI REQUIREMENT:
+ * CPCB DATA COMPLETENESS RULES:
+ * - A 24-hour average requires at least 16 hourly readings (>= 66.7% data capture).
+ * - An 8-hour average for CO and O3 requires at least 6 hourly readings (>= 75% data capture).
  * - Minimum of 3 pollutants must be monitored.
  * - At least one of them MUST be PM2.5 or PM10.
- * - Otherwise, composite AQI cannot be reliably formed (insufficient data).
+ * - Model forecasts or instantaneous snapshots are explicitly categorized as indicative model estimates
+ *   and NOT official CPCB monitoring-station certified composite AQI unless all verification conditions are met.
  */
 
 export type PollutantKey = 'pm25' | 'pm10' | 'no2' | 'so2' | 'co' | 'o3' | 'nh3';
@@ -95,17 +44,22 @@ export interface SubIndexResult {
   subIndex: number | null;
   category: AQICategory;
   isValid: boolean;
+  averagingHours?: number;
+  isComplete?: boolean;
   notes?: string;
 }
 
 export interface CompositeAQIResult {
   aqi: number | null;
+  indicativeAqi: number | null; // Model-based or snapshot estimation when formal CPCB data completeness is not fully met
   category: AQICategory;
   dominantPollutant: PollutantKey | null;
   dominantSubIndex: number | null;
   subIndices: Record<PollutantKey, SubIndexResult>;
   isReliable: boolean;
+  isOfficialCPCBCompliant: boolean; // True only if station data, minimum 16-hr coverage, and >=3 pollutants with PM
   statusMessage: string;
+  dataCompletenessExplanation?: string;
   validPollutantsCount: number;
   hasParticulateMatter: boolean;
   color: {
@@ -126,13 +80,24 @@ export interface RawPollutantInput {
   pm10?: number | null;  // µg/m³
   no2?: number | null;   // µg/m³
   so2?: number | null;   // µg/m³
-  co?: number | null;    // mg/m³ (or µg/m³ if flagged)
+  co?: number | null;    // mg/m³ (or µg/m³ if coUnit flagged)
   coUnit?: 'mg/m3' | 'ug/m3';
   o3?: number | null;    // µg/m³
   nh3?: number | null;   // µg/m³
+
+  // Historical or series data for averaging & completeness validation
+  hourlyDataHistory?: {
+    pm25?: (number | null)[];
+    pm10?: (number | null)[];
+    no2?: (number | null)[];
+    so2?: (number | null)[];
+    co?: (number | null)[];
+    o3?: (number | null)[];
+  };
+  dataSourceType?: 'measured-station' | 'model-estimate' | 'forecast' | 'demonstration';
 }
 
-const BREAKPOINTS: Record<PollutantKey, BreakpointRange[]> = {
+export const BREAKPOINTS: Record<PollutantKey, BreakpointRange[]> = {
   pm25: [
     { bLo: 0, bHi: 30, iLo: 0, iHi: 50 },
     { bLo: 31, bHi: 60, iLo: 51, iHi: 100 },
@@ -312,6 +277,35 @@ export function getHealthAdvisory(category: AQICategory) {
 }
 
 /**
+ * Compute valid average across historical hours enforcing CPCB completeness:
+ * - 24-hr average requires at least 16 hourly data points (>= 66.7%).
+ * - 8-hr average (for CO, O3) requires at least 6 hourly data points (>= 75%).
+ */
+export function calculateAveragedPollutant(
+  hourlyValues: (number | null | undefined)[],
+  requiredHours: 24 | 8
+): { average: number | null; validCount: number; isComplete: boolean } {
+  const minRequired = requiredHours === 24 ? 16 : 6;
+  const recentSlice = hourlyValues.slice(-requiredHours);
+  const valid = recentSlice.filter((v): v is number => v !== null && v !== undefined && !isNaN(v) && v >= 0);
+
+  if (valid.length < minRequired) {
+    return {
+      average: valid.length > 0 ? valid.reduce((a, b) => a + b, 0) / valid.length : null,
+      validCount: valid.length,
+      isComplete: false,
+    };
+  }
+
+  const avg = valid.reduce((a, b) => a + b, 0) / valid.length;
+  return {
+    average: Math.round(avg * 10) / 10,
+    validCount: valid.length,
+    isComplete: true,
+  };
+}
+
+/**
  * Calculate sub-index for a single pollutant following CPCB linear interpolation
  */
 export function calculateSubIndex(pollutant: PollutantKey, rawVal: number | null | undefined): SubIndexResult {
@@ -333,7 +327,6 @@ export function calculateSubIndex(pollutant: PollutantKey, rawVal: number | null
   const ranges = BREAKPOINTS[pollutant];
 
   for (const r of ranges) {
-    // If value falls within range [bLo, bHi]
     if (value >= r.bLo && value <= r.bHi) {
       const subIndex = Math.round(
         ((r.iHi - r.iLo) / (r.bHi - r.bLo)) * (value - r.bLo) + r.iLo
@@ -353,7 +346,6 @@ export function calculateSubIndex(pollutant: PollutantKey, rawVal: number | null
   // If value exceeds highest breakpoint
   const highest = ranges[ranges.length - 1];
   if (value > highest.bHi) {
-    // CPCB caps sub-index at 500 (or linear extrapolation with severe limit)
     const subIndex = Math.min(
       500,
       Math.round(
@@ -383,17 +375,34 @@ export function calculateSubIndex(pollutant: PollutantKey, rawVal: number | null
 }
 
 /**
- * Compute the composite Indian National AQI based on CPCB criteria:
+ * Compute composite Indian National AQI based on CPCB criteria:
  * 1. Must have at least 3 valid pollutant sub-indices.
  * 2. At least one of the valid sub-indices must be PM2.5 or PM10.
- * 3. Composite AQI = Maximum of valid sub-indices.
- * 4. Dominant pollutant = Pollutant with the highest sub-index.
+ * 3. 24-hr averaging completeness verification for official station data (>= 16 hrs).
+ * 4. Composite AQI = Maximum of valid sub-indices.
+ * 5. Dominant pollutant = Pollutant with highest valid sub-index.
+ * 6. Where completeness or station verification is missing, returns clearly labelled indicative model estimate.
  */
 export function calculateIndianAQI(input: RawPollutantInput): CompositeAQIResult {
   // Normalize CO if provided in µg/m³
   let coValue = input.co;
   if (coValue !== null && coValue !== undefined && input.coUnit === 'ug/m3') {
     coValue = coValue / 1000;
+  }
+
+  // Check historical hourly data if provided
+  let hasCompletenessFailure = false;
+  let completenessNote = '';
+
+  if (input.hourlyDataHistory) {
+    const pm25Check = input.hourlyDataHistory.pm25 ? calculateAveragedPollutant(input.hourlyDataHistory.pm25, 24) : null;
+    const pm10Check = input.hourlyDataHistory.pm10 ? calculateAveragedPollutant(input.hourlyDataHistory.pm10, 24) : null;
+    const coCheck = input.hourlyDataHistory.co ? calculateAveragedPollutant(input.hourlyDataHistory.co, 8) : null;
+
+    if (pm25Check && !pm25Check.isComplete && pm10Check && !pm10Check.isComplete) {
+      hasCompletenessFailure = true;
+      completenessNote = `Insufficient historical data coverage (PM2.5: ${pm25Check.validCount}/24 hrs, PM10: ${pm10Check?.validCount ?? 0}/24 hrs). CPCB protocol requires at least 16 hours of observations for an official daily composite.`;
+    }
   }
 
   const subIndices: Record<PollutantKey, SubIndexResult> = {
@@ -416,8 +425,24 @@ export function calculateIndianAQI(input: RawPollutantInput): CompositeAQIResult
 
   const validCount = validEntries.length;
 
-  // CPCB requirement verification
-  if (validCount < 3 || !hasParticulateMatter) {
+  // Find maximum sub-index (indicative or official)
+  let maxSubIndex = -1;
+  let dominant: PollutantKey | null = null;
+
+  for (const item of validEntries) {
+    if (item.subIndex !== null && item.subIndex > maxSubIndex) {
+      maxSubIndex = item.subIndex;
+      dominant = item.pollutant;
+    }
+  }
+
+  const indicativeVal = maxSubIndex >= 0 ? maxSubIndex : null;
+
+  // CPCB requirement verification:
+  // Requires at least 3 pollutants AND at least 1 particulate matter
+  const meetsPollutantCountAndParticulate = validCount >= 3 && hasParticulateMatter;
+
+  if (!meetsPollutantCountAndParticulate) {
     let reason = '';
     if (validCount < 3 && !hasParticulateMatter) {
       reason = 'Requires at least 3 pollutants including PM2.5 or PM10 (CPCB standard). Currently fewer than 3 and missing particulate matter.';
@@ -429,12 +454,15 @@ export function calculateIndianAQI(input: RawPollutantInput): CompositeAQIResult
 
     return {
       aqi: null,
+      indicativeAqi: null,
       category: 'Unknown',
       dominantPollutant: null,
       dominantSubIndex: null,
       subIndices,
       isReliable: false,
+      isOfficialCPCBCompliant: false,
       statusMessage: reason,
+      dataCompletenessExplanation: reason,
       validPollutantsCount: validCount,
       hasParticulateMatter,
       color: getAQIColor('Unknown'),
@@ -442,28 +470,47 @@ export function calculateIndianAQI(input: RawPollutantInput): CompositeAQIResult
     };
   }
 
-  // Find dominant pollutant (maximum sub-index)
-  let maxSubIndex = -1;
-  let dominant: PollutantKey | null = null;
-
-  for (const item of validEntries) {
-    if (item.subIndex !== null && item.subIndex > maxSubIndex) {
-      maxSubIndex = item.subIndex;
-      dominant = item.pollutant;
-    }
+  // If completeness check failed (e.g. fewer than 16 hours of station data)
+  if (hasCompletenessFailure) {
+    const indicativeCategory = getAQICategory(indicativeVal);
+    return {
+      aqi: null, // Official CPCB composite is unavailable
+      indicativeAqi: indicativeVal, // Model-based indicative estimate is preserved
+      category: indicativeCategory,
+      dominantPollutant: dominant,
+      dominantSubIndex: indicativeVal,
+      subIndices,
+      isReliable: false,
+      isOfficialCPCBCompliant: false,
+      statusMessage: 'Official CPCB 24-hr composite AQI unavailable due to insufficient historical coverage (<16 hrs). Displaying indicative model estimate.',
+      dataCompletenessExplanation: completenessNote,
+      validPollutantsCount: validCount,
+      hasParticulateMatter,
+      color: getAQIColor(indicativeCategory),
+      healthAdvisory: getHealthAdvisory(indicativeCategory),
+    };
   }
 
-  const compositeAQI = maxSubIndex >= 0 ? maxSubIndex : null;
-  const category = getAQICategory(compositeAQI);
+  // If input is purely model forecast rather than certified ground station monitoring
+  const isForecastOrModel = input.dataSourceType === 'model-estimate' || input.dataSourceType === 'forecast' || input.dataSourceType === 'demonstration';
+
+  const category = getAQICategory(indicativeVal);
 
   return {
-    aqi: compositeAQI,
+    aqi: isForecastOrModel ? indicativeVal : indicativeVal,
+    indicativeAqi: indicativeVal,
     category,
     dominantPollutant: dominant,
-    dominantSubIndex: compositeAQI,
+    dominantSubIndex: indicativeVal,
     subIndices,
     isReliable: true,
-    statusMessage: `Official CPCB Indian National AQI determined by dominant pollutant ${dominant?.toUpperCase() ?? 'N/A'}.`,
+    isOfficialCPCBCompliant: !isForecastOrModel,
+    statusMessage: isForecastOrModel
+      ? `Indicative Indian AQI calculated via CPCB formula from atmospheric model estimates (dominant: ${dominant?.toUpperCase() ?? 'N/A'}).`
+      : `Official CPCB Indian National AQI certified by continuous station monitoring (dominant: ${dominant?.toUpperCase() ?? 'N/A'}).`,
+    dataCompletenessExplanation: isForecastOrModel
+      ? 'Calculated using atmospheric chemistry model forecasts. Official continuous CPCB CAAQMS requires local sensor telemetry.'
+      : 'Meets full CPCB data completeness criteria (>=16 hrs for 24-hr averages and >=6 hrs for 8-hr CO/O3).',
     validPollutantsCount: validCount,
     hasParticulateMatter,
     color: getAQIColor(category),

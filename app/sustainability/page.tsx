@@ -48,14 +48,56 @@ export default function SustainabilityPage() {
     }
   };
 
+  // Dynamic streak calculation based on unique days of logged actions
+  const calculateStreak = (actionList: EcoAction[]): number => {
+    if (actionList.length === 0) return 0;
+    const uniqueDays = new Set(
+      actionList.map((a) => new Date(a.timestamp).toISOString().split('T')[0])
+    );
+    const sortedDays = Array.from(uniqueDays).sort().reverse();
+    const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+    // If no action logged today or yesterday, streak is broken
+    if (!sortedDays.includes(today) && !sortedDays.includes(yesterday)) {
+      return 0;
+    }
+
+    let streak = 0;
+    let checkDate = new Date(sortedDays[0]);
+
+    for (let i = 0; i < sortedDays.length; i++) {
+      const expectedStr = checkDate.toISOString().split('T')[0];
+      if (sortedDays.includes(expectedStr)) {
+        streak++;
+        checkDate = new Date(checkDate.getTime() - 86400000);
+      } else {
+        break;
+      }
+    }
+    return Math.max(streak, 1);
+  };
+
   // Calculations
   const totalPoints = actions.reduce((sum, a) => sum + a.ecoPoints, 0);
   const totalCo2Saved = actions.reduce((sum, a) => sum + a.estimatedCo2SavedKg, 0);
-  const currentStreakDays = 6; // Active streak
+  const currentStreakDays = calculateStreak(actions);
 
   const handleAddAction = (e: React.FormEvent) => {
     e.preventDefault();
-    const distNum = parseFloat(distance) || 5;
+    const distNum = Math.max(0.1, Math.min(200, parseFloat(distance) || 5));
+    const normalizedTitle = (title.trim() || `${actionType.replace('_', ' ').toUpperCase()} Trip`).slice(0, 100);
+
+    // Prevent immediate duplicate submissions within last 2 minutes with identical title
+    const recentDuplicate = actions.find((a) => {
+      const timeDiffMs = Date.now() - new Date(a.timestamp).getTime();
+      return timeDiffMs < 120000 && a.title.toLowerCase() === normalizedTitle.toLowerCase();
+    });
+
+    if (recentDuplicate) {
+      alert('A similar action was already logged moments ago. Duplicate prevented.');
+      return;
+    }
 
     // Environmental calculation factors (transparent estimates based on Indian urban transport baseline)
     // Average ICE car emissions ~ 180 g CO2/km

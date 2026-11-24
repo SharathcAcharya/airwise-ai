@@ -2,12 +2,14 @@
   "name": "airwise-ai",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:aqi": "node --experimental-strip-types ./lib/run-tests.mjs"
+    "test:aqi": "node --experimental-strip-types ./lib/run-tests.mjs",
+    "test:audit": "node --experimental-strip-types ./lib/run-audit.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.16.0",

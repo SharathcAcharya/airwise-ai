@@ -43,7 +43,7 @@ export default function ExposureExplorerPage() {
         <div className="flex items-center gap-2 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 max-w-md">
           <Info className="w-4 h-4 text-emerald-600 shrink-0" />
           <span>
-            <strong>Resolution Notice:</strong> Atmospheric models operate at ~10 km grid resolution. Street-level micrometeorology is estimated, not measured directly.
+            <strong>Resolution Notice:</strong> CAMS global atmospheric chemistry models operate at ~40 km grid resolution (0.4° × 0.4°). Street-level micro-meteorology is indicative and does not replace continuous CAAQMS sensors.
           </span>
         </div>
       </div>

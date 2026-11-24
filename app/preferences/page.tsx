@@ -8,7 +8,6 @@ import {
   HeartPulse, 
   Clock, 
   Train, 
-  BellRing,
   RotateCcw
 } from 'lucide-react';
 import { DEFAULT_PREFERENCES, UserPreferences } from '@/lib/store';
@@ -49,25 +48,25 @@ export default function PreferencesPage() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-              <Sliders className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
+              <Sliders className="w-3.5 h-3.5 text-[#4BA9FF]" />
               User Profile Configuration
             </span>
           </div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
+          <h2 className="text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[32.4px]">
             Personalization & Sensitivity Settings
           </h2>
-          <p className="text-sm text-slate-600 mt-0.5">
+          <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
             Customize your schedule and health sensitivity profile to tailor My Day, Air-Smart™ plans.
           </p>
         </div>
 
         {savedNotice && (
-          <div className="flex items-center gap-2 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-200 animate-fade-in">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <div className="flex items-center gap-2 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-3 py-2 rounded-[6.8px]">
+            <CheckCircle2 className="w-4 h-4 text-[#4BA9FF]" />
             <span>Preferences Saved Successfully</span>
           </div>
         )}
@@ -75,16 +74,16 @@ export default function PreferencesPage() {
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* Health Sensitivity Profile */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+        <div className="bg-[#39414B] p-6 rounded-[12px] border border-[#677580] space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200">
-              <HeartPulse className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-[6.8px] bg-[#23272B] text-[#4BA9FF] flex items-center justify-center border border-[#677580]">
+              <HeartPulse className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-extrabold text-base text-slate-900">
+              <h3 className="font-bold text-[15px] text-[#F9FAFF] leading-[20px]">
                 Health & Sensitivity Profile
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-[10px] text-[#D0D2D7]">
                 Adjusts warning thresholds for respiratory and cardiovascular sensitivity
               </p>
             </div>
@@ -99,10 +98,10 @@ export default function PreferencesPage() {
             ].map((prof) => (
               <label
                 key={prof.id}
-                className={`p-3.5 rounded-xl border flex items-start gap-3 cursor-pointer transition-all ${
+                className={`p-3.5 rounded-[6.8px] border flex items-start gap-3 cursor-pointer transition-colors ${
                   prefs.sensitivityProfile === prof.id
-                    ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-500/20'
-                    : 'border-slate-200 hover:bg-slate-50'
+                    ? 'bg-[#296AE1] border-[#4BA9FF] text-[#F9FAFF]'
+                    : 'bg-[#23272B] border-[#677580] text-[#D0D2D7] hover:border-[#97A7B6]'
                 }`}
               >
                 <input
@@ -111,11 +110,11 @@ export default function PreferencesPage() {
                   value={prof.id}
                   checked={prefs.sensitivityProfile === prof.id}
                   onChange={(e: any) => setPrefs({ ...prefs, sensitivityProfile: e.target.value })}
-                  className="mt-1 text-emerald-600 focus:ring-emerald-500"
+                  className="mt-1"
                 />
                 <div>
-                  <div className="font-bold text-sm text-slate-900">{prof.title}</div>
-                  <div className="text-xs text-slate-500 mt-0.5">{prof.desc}</div>
+                  <div className="font-bold text-[12px] text-[#F9FAFF]">{prof.title}</div>
+                  <div className="text-[10px] text-[#CCD3D7] mt-0.5">{prof.desc}</div>
                 </div>
               </label>
             ))}
@@ -123,16 +122,16 @@ export default function PreferencesPage() {
         </div>
 
         {/* Daily Schedule Parameters */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+        <div className="bg-[#39414B] p-6 rounded-[12px] border border-[#677580] space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-slate-50 text-slate-700 flex items-center justify-center border border-slate-200">
-              <Clock className="w-5 h-5 text-emerald-600" />
+            <div className="w-8 h-8 rounded-[6.8px] bg-[#23272B] text-[#4BA9FF] flex items-center justify-center border border-[#677580]">
+              <Clock className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-extrabold text-base text-slate-900">
+              <h3 className="font-bold text-[15px] text-[#F9FAFF] leading-[20px]">
                 Daily Routine & Exercise Timing
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-[10px] text-[#D0D2D7]">
                 Times used to generate My Day activity window suggestions
               </p>
             </div>
@@ -140,19 +139,19 @@ export default function PreferencesPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-bold text-[#D0D2D7] uppercase tracking-wider mb-1">
                 Typical Wake-Up
               </label>
               <input
                 type="time"
                 value={prefs.wakeUpTime}
                 onChange={(e) => setPrefs({ ...prefs, wakeUpTime: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 font-semibold"
+                className="aqi-input w-full"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-bold text-[#D0D2D7] uppercase tracking-wider mb-1">
                 Exercise Time
               </label>
               <input
@@ -164,12 +163,12 @@ export default function PreferencesPage() {
                     exerciseSchedule: { ...prefs.exerciseSchedule, time: e.target.value },
                   })
                 }
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 font-semibold"
+                className="aqi-input w-full"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-bold text-[#D0D2D7] uppercase tracking-wider mb-1">
                 Preferred Exercise Form
               </label>
               <select
@@ -180,7 +179,7 @@ export default function PreferencesPage() {
                     exerciseSchedule: { ...prefs.exerciseSchedule, type: e.target.value },
                   })
                 }
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 font-semibold"
+                className="aqi-input w-full"
               >
                 <option value="outdoor-running">Outdoor Running / Jogging</option>
                 <option value="cycling">Outdoor Cycling</option>
@@ -193,16 +192,16 @@ export default function PreferencesPage() {
         </div>
 
         {/* Commute Preferences */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+        <div className="bg-[#39414B] p-6 rounded-[12px] border border-[#677580] space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-slate-50 text-slate-700 flex items-center justify-center border border-slate-200">
-              <Train className="w-5 h-5 text-emerald-600" />
+            <div className="w-8 h-8 rounded-[6.8px] bg-[#23272B] text-[#4BA9FF] flex items-center justify-center border border-[#677580]">
+              <Train className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-extrabold text-base text-slate-900">
+              <h3 className="font-bold text-[15px] text-[#F9FAFF] leading-[20px]">
                 Work Commute Preferences
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-[10px] text-[#D0D2D7]">
                 Determines exposure risk and sustainable alternatives
               </p>
             </div>
@@ -210,7 +209,7 @@ export default function PreferencesPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-bold text-[#D0D2D7] uppercase tracking-wider mb-1">
                 Work Start Time (Morning Rush)
               </label>
               <input
@@ -222,18 +221,18 @@ export default function PreferencesPage() {
                     workSchedule: { ...prefs.workSchedule, start: e.target.value },
                   })
                 }
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 font-semibold"
+                className="aqi-input w-full"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-bold text-[#D0D2D7] uppercase tracking-wider mb-1">
                 Primary Commute Vehicle
               </label>
               <select
                 value={prefs.commuteMode}
                 onChange={(e: any) => setPrefs({ ...prefs, commuteMode: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 font-semibold"
+                className="aqi-input w-full"
               >
                 <option value="metro">Electric Metro / Rapid Rail</option>
                 <option value="bus">City Bus (Electric / CNG)</option>
@@ -251,7 +250,7 @@ export default function PreferencesPage() {
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 border border-slate-200 cursor-pointer"
+            className="aqi-btn-secondary"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Defaults</span>
@@ -259,7 +258,7 @@ export default function PreferencesPage() {
 
           <button
             type="submit"
-            className="flex items-center gap-2 px-6 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-extrabold shadow-sm transition-colors cursor-pointer"
+            className="aqi-btn-primary"
           >
             <Save className="w-4 h-4" />
             <span>Save Preferences</span>

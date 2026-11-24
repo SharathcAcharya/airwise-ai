@@ -6,12 +6,9 @@ import {
   Wind, 
   MapPin, 
   AlertCircle, 
-  ShieldCheck, 
   ArrowUpRight, 
   Sparkles, 
   RefreshCw, 
-  CheckCircle2, 
-  TrendingUp,
   Activity,
   Calendar,
   Compass,
@@ -23,9 +20,7 @@ import {
   XAxis, 
   YAxis, 
   Tooltip, 
-  ResponsiveContainer,
-  BarChart,
-  Bar
+  ResponsiveContainer
 } from 'recharts';
 import { POPULAR_LOCATIONS, AirQualityResponse } from '@/lib/air-quality-service';
 
@@ -87,28 +82,28 @@ export default function DashboardPage() {
   };
 
   const current = airData?.current;
-  const aqiVal = current?.aqi;
+  const aqiVal = current?.indicativeAqi ?? current?.aqi;
   const category = current?.category || 'Unknown';
   const dominant = current?.dominantPollutant?.toUpperCase() || 'N/A';
 
   return (
     <div className="space-y-6">
       {/* Top Banner & Location Switcher */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4BA9FF] animate-pulse"></span>
               Live Environmental Feed
             </span>
-            <span className="text-xs text-slate-400">•</span>
-            <span className="text-xs text-slate-500 font-medium">CPCB Methodology</span>
+            <span className="text-[10px] text-[#97A7B6]">•</span>
+            <span className="text-[10px] text-[#D0D2D7] font-semibold">CPCB Methodology</span>
           </div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
+          <h2 className="text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[32.4px]">
             Urban Air Quality Intelligence
           </h2>
-          <p className="text-sm text-slate-600 mt-0.5">
-            Monitor verified pollutants, sub-indices and personalized decision recommendations.
+          <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
+            Real-time pollutant breakdown, CPCB breakpoint sub-indices and daily action plans.
           </p>
         </div>
 
@@ -118,7 +113,7 @@ export default function DashboardPage() {
             <select
               value={selectedLocId}
               onChange={(e) => setSelectedLocId(e.target.value)}
-              className="appearance-none bg-slate-50 hover:bg-slate-100/80 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl pl-3.5 pr-8 py-2.5 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 transition-colors cursor-pointer"
+              className="appearance-none bg-[#23272B] hover:bg-[#555555] border border-[#677580] text-[#F9FAFF] text-[12px] font-semibold rounded-[6.8px] pl-3.5 pr-8 py-2.5 focus:outline-hidden focus:border-[#4BA9FF] transition-colors cursor-pointer"
             >
               {POPULAR_LOCATIONS.map((loc) => (
                 <option key={loc.id} value={loc.id}>
@@ -126,7 +121,7 @@ export default function DashboardPage() {
                 </option>
               ))}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#97A7B6]">
               <Compass className="w-4 h-4" />
             </div>
           </div>
@@ -134,26 +129,26 @@ export default function DashboardPage() {
           <button
             onClick={handleUseCurrentLocation}
             disabled={geoLocating}
-            className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2.5 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-colors cursor-pointer"
+            className="aqi-btn-outline"
           >
-            <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+            <MapPin className="w-3.5 h-3.5 text-[#4BA9FF]" />
             <span>{geoLocating ? 'Locating...' : 'Use GPS'}</span>
           </button>
 
           <button
             onClick={() => loadData(selectedLocId)}
-            className="p-2.5 text-slate-600 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-colors cursor-pointer"
+            className="p-2.5 text-[#F9FAFF] hover:bg-[#555555] bg-[#23272B] border border-[#677580] rounded-[6.8px] transition-colors cursor-pointer"
             title="Refresh Readings"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#4BA9FF]' : ''}`} />
           </button>
         </div>
       </div>
 
       {/* Error Alert */}
       {error && (
-        <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-center gap-3 text-amber-800 text-sm">
-          <AlertCircle className="w-5 h-5 shrink-0 text-amber-600" />
+        <div className="p-4 bg-[#39414B] border border-[#E75835] rounded-[10.88px] flex items-center gap-3 text-[#F9FAFF] text-[12px]">
+          <AlertCircle className="w-5 h-5 shrink-0 text-[#EA8C34]" />
           <span>{error}</span>
         </div>
       )}
@@ -161,9 +156,9 @@ export default function DashboardPage() {
       {/* Loading Skeleton */}
       {loading && !airData && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="h-64 bg-white border border-slate-200 rounded-2xl animate-pulse p-6"></div>
-          <div className="h-64 bg-white border border-slate-200 rounded-2xl animate-pulse p-6"></div>
-          <div className="h-64 bg-white border border-slate-200 rounded-2xl animate-pulse p-6"></div>
+          <div className="h-64 bg-[#39414B] border border-[#677580] rounded-[12px] animate-pulse p-6"></div>
+          <div className="h-64 bg-[#39414B] border border-[#677580] rounded-[12px] animate-pulse p-6"></div>
+          <div className="h-64 bg-[#39414B] border border-[#677580] rounded-[12px] animate-pulse p-6"></div>
         </div>
       )}
 
@@ -172,84 +167,84 @@ export default function DashboardPage() {
           {/* Main Hero Metrics Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Primary CPCB AQI Card */}
-            <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between relative overflow-hidden">
+            <div className="lg:col-span-5 bg-[#39414B] p-6 rounded-[12px] border border-[#677580] flex flex-col justify-between relative overflow-hidden">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs uppercase font-bold tracking-wider text-slate-500">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-[#D0D2D7]">
                       National Air Quality Index
                     </span>
-                    <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-semibold">
+                    <span className="text-[8px] bg-[#23272B] text-[#4BA9FF] border border-[#677580] px-2 py-0.5 rounded-[6.4px] font-bold">
                       CPCB India
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mt-1">
+                  <h3 className="text-[18px] font-bold text-[#F9FAFF] mt-1 leading-[24px]">
                     {airData.location.name}
                   </h3>
                 </div>
-                <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${current?.color.bg}`}>
+                <div className={`px-3 py-1 rounded-[6.4px] text-[10px] font-extrabold uppercase tracking-wider border ${current?.color.bg}`}>
                   {category}
                 </div>
               </div>
 
-              {/* Big AQI Number */}
+              {/* Big AQI Number - 68px font from spec */}
               <div className="my-6 flex items-baseline gap-4">
-                <span className="text-6xl sm:text-7xl font-black tracking-tight text-slate-900">
+                <span className="text-[68px] font-extrabold tracking-tight text-[#F9FAFF] leading-[68px]">
                   {aqiVal !== null ? aqiVal : 'N/A'}
                 </span>
                 <div className="space-y-0.5">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#CCD3D7] block leading-[13.6px]">
                     Composite AQI
                   </span>
-                  <span className="text-sm font-semibold text-slate-700 flex items-center gap-1">
-                    Dominant: <strong className="text-emerald-700">{dominant}</strong>
+                  <span className="text-[12px] font-semibold text-[#F9FAFF] flex items-center gap-1">
+                    Dominant: <strong className="text-[#4BA9FF]">{dominant}</strong>
                   </span>
                 </div>
               </div>
 
               {/* Health Advisory Brief */}
-              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-1">
-                <div className="font-semibold text-slate-900 flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 text-emerald-600" />
+              <div className="p-3.5 bg-[#23272B] rounded-[10.88px] border border-[#677580] text-[12px] text-[#D0D2D7] space-y-1">
+                <div className="font-bold text-[#F9FAFF] flex items-center gap-1.5 leading-[15.2px]">
+                  <Activity className="w-3.5 h-3.5 text-[#4BA9FF]" />
                   Health Advisory
                 </div>
-                <p className="leading-relaxed">
+                <p className="leading-[17.28px]">
                   {current?.healthAdvisory.general}
                 </p>
               </div>
 
               {/* Metadata Badges */}
-              <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <div className="mt-4 pt-4 border-t border-[#677580] flex items-center justify-between text-[10px] text-[#CCD3D7]">
                 <span className="flex items-center gap-1">
-                  Source: <strong className="text-slate-700">{airData.source}</strong>
+                  Source: <strong className="text-[#F9FAFF]">{airData.source}</strong>
                 </span>
-                <span className="capitalize px-2 py-0.5 bg-slate-100 rounded text-slate-600 font-medium">
+                <span className="capitalize px-2 py-0.5 bg-[#23272B] rounded-[6.4px] text-[#D0D2D7] font-semibold border border-[#677580]">
                   {airData.dataSourceType}
                 </span>
               </div>
             </div>
 
-            {/* My Day Signature Teaser Card */}
-            <div className="lg:col-span-7 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 text-white p-6 rounded-2xl shadow-md flex flex-col justify-between">
+            {/* My Day Signature Feature Card */}
+            <div className="lg:col-span-7 bg-[#23272B] text-[#F9FAFF] p-6 rounded-[12px] border border-[#677580] flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-200 bg-emerald-800/60 px-3 py-1 rounded-full border border-emerald-700/50">
-                    <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#F9FAFF] bg-[#296AE1] px-3 py-1 rounded-[6.4px]">
+                    <Sparkles className="w-3.5 h-3.5 text-[#4BA9FF]" />
                     Signature Feature
                   </span>
                   <Link
                     href="/my-day"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-200 hover:text-white transition-colors"
+                    className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#4BA9FF] hover:text-[#F9FAFF] transition-colors"
                   >
                     <span>Full Schedule</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </Link>
                 </div>
 
-                <h3 className="text-2xl font-black mt-3 tracking-tight">
+                <h3 className="text-[22px] font-extrabold mt-3 tracking-tight leading-[27.6px]">
                   My Day, Air-Smart™
                 </h3>
-                <p className="text-sm text-emerald-100/90 mt-1 max-w-xl">
+                <p className="text-[12px] text-[#D0D2D7] mt-1 max-w-xl leading-[17.28px]">
                   {aqiVal && aqiVal > 200 
                     ? 'Smog elevation detected during early hours. Move your morning cardio workouts indoors and schedule errand runs between 2:00 PM and 4:30 PM.'
                     : 'Atmospheric ventilation is favorable. Safe for outdoor cardio and active commutes with lower particulate risk.'}
@@ -257,38 +252,38 @@ export default function DashboardPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
-                <div className="bg-emerald-950/40 border border-emerald-600/30 p-3 rounded-xl backdrop-blur-xs">
-                  <div className="text-[11px] uppercase tracking-wider text-emerald-300 font-bold">
+                <div className="bg-[#39414B] border border-[#677580] p-3 rounded-[6.8px]">
+                  <div className="text-[10px] uppercase tracking-wider text-[#4BA9FF] font-bold">
                     Optimal Running Window
                   </div>
-                  <div className="text-base font-bold mt-0.5">
+                  <div className="text-[15px] font-bold mt-0.5 text-[#F9FAFF]">
                     1:30 PM – 4:30 PM
                   </div>
-                  <div className="text-xs text-emerald-200/80 mt-0.5">
+                  <div className="text-[10px] text-[#D0D2D7] mt-0.5">
                     Lowest particulate concentration
                   </div>
                 </div>
 
-                <div className="bg-emerald-950/40 border border-emerald-600/30 p-3 rounded-xl backdrop-blur-xs">
-                  <div className="text-[11px] uppercase tracking-wider text-emerald-300 font-bold">
+                <div className="bg-[#39414B] border border-[#677580] p-3 rounded-[6.8px]">
+                  <div className="text-[10px] uppercase tracking-wider text-[#4BA9FF] font-bold">
                     Commute Protection
                   </div>
-                  <div className="text-base font-bold mt-0.5">
+                  <div className="text-[15px] font-bold mt-0.5 text-[#F9FAFF]">
                     Electric Metro Preferred
                   </div>
-                  <div className="text-xs text-emerald-200/80 mt-0.5">
+                  <div className="text-[10px] text-[#D0D2D7] mt-0.5">
                     Filter out road diesel soot
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-emerald-700/50">
-                <span className="text-xs text-emerald-200/80">
+              <div className="flex items-center justify-between pt-3 border-t border-[#677580]">
+                <span className="text-[10px] text-[#CCD3D7]">
                   Customized for healthy adult profile
                 </span>
                 <Link
                   href="/preferences"
-                  className="text-xs font-bold text-white underline underline-offset-4 hover:text-emerald-200"
+                  className="text-[12px] font-bold text-[#4BA9FF] hover:underline"
                 >
                   Configure My Profile
                 </Link>
@@ -300,10 +295,10 @@ export default function DashboardPage() {
           <div>
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="text-lg font-bold text-slate-900 tracking-tight">
+                <h3 className="text-[15px] font-bold text-[#F9FAFF] tracking-tight leading-[20px]">
                   Six Official CPCB Pollutants
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-[10px] text-[#D0D2D7]">
                   Individual concentrations and derived sub-indices according to official breakpoint equations
                 </p>
               </div>
@@ -323,38 +318,38 @@ export default function DashboardPage() {
                 return (
                   <div
                     key={item.key}
-                    className={`bg-white p-4 rounded-xl border transition-all ${
+                    className={`bg-[#39414B] p-4 rounded-[12px] border transition-colors duration-150 ${
                       isDominant 
-                        ? 'border-emerald-500 ring-2 ring-emerald-500/20 shadow-sm' 
-                        : 'border-slate-200 hover:border-slate-300'
+                        ? 'border-[#4BA9FF] shadow-xs' 
+                        : 'border-[#677580] hover:border-[#97A7B6]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-extrabold text-sm text-slate-900">
+                      <span className="font-extrabold text-[12px] text-[#F9FAFF]">
                         {item.name}
                       </span>
                       {isDominant && (
-                        <span className="text-[9px] font-black uppercase tracking-wider bg-emerald-600 text-white px-1.5 py-0.5 rounded">
+                        <span className="text-[8px] font-black uppercase tracking-wider bg-[#296AE1] text-[#F9FAFF] px-1.5 py-0.5 rounded-[6.4px]">
                           Dominant
                         </span>
                       )}
                     </div>
-                    <div className="text-[11px] text-slate-500 mt-0.5 truncate">
+                    <div className="text-[10px] text-[#D0D2D7] mt-0.5 truncate">
                       {item.label}
                     </div>
 
                     <div className="mt-3 flex items-baseline justify-between">
-                      <span className="text-2xl font-bold text-slate-900">
+                      <span className="text-[22px] font-bold text-[#F9FAFF]">
                         {sub?.value ?? '0'}
                       </span>
-                      <span className="text-[11px] font-medium text-slate-500">
+                      <span className="text-[10px] font-semibold text-[#CCD3D7]">
                         {sub?.unit}
                       </span>
                     </div>
 
-                    <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-[10px] text-slate-500">Sub-Index</span>
-                      <span className="text-xs font-bold text-slate-800">
+                    <div className="mt-2 pt-2 border-t border-[#677580] flex items-center justify-between">
+                      <span className="text-[10px] text-[#D0D2D7]">Sub-Index</span>
+                      <span className="text-[12px] font-bold text-[#4BA9FF]">
                         {sub?.subIndex ?? 'N/A'}
                       </span>
                     </div>
@@ -367,23 +362,23 @@ export default function DashboardPage() {
           {/* Hourly Pollution Chart & 5-Day Forecast */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* 24-Hour Trend Chart */}
-            <div className="lg:col-span-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+            <div className="lg:col-span-8 bg-[#39414B] p-6 rounded-[12px] border border-[#677580]">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="font-bold text-base text-slate-900">
+                  <h3 className="font-bold text-[15px] text-[#F9FAFF] leading-[20px]">
                     24-Hour Hourly Trend
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-[10px] text-[#D0D2D7]">
                     Hourly PM2.5 (µg/m³) and estimated Indian AQI trajectory
                   </p>
                 </div>
-                <div className="flex items-center gap-3 text-xs font-semibold">
-                  <span className="flex items-center gap-1.5 text-emerald-700">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <div className="flex items-center gap-3 text-[10px] font-semibold">
+                  <span className="flex items-center gap-1.5 text-[#4BA9FF]">
+                    <span className="w-2 h-2 rounded-full bg-[#4BA9FF]"></span>
                     AQI Value
                   </span>
-                  <span className="flex items-center gap-1.5 text-slate-500">
-                    <span className="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                  <span className="flex items-center gap-1.5 text-[#D0D2D7]">
+                    <span className="w-2 h-2 rounded-full bg-[#97A7B6]"></span>
                     PM2.5 (µg/m³)
                   </span>
                 </div>
@@ -394,26 +389,26 @@ export default function DashboardPage() {
                   <AreaChart data={airData.hourly}>
                     <defs>
                       <linearGradient id="aqiGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
+                        <stop offset="5%" stopColor="#4BA9FF" stopOpacity={0.4} />
+                        <stop offset="95%" stopColor="#4BA9FF" stopOpacity={0.0} />
                       </linearGradient>
                     </defs>
                     <XAxis 
                       dataKey="displayTime" 
-                      tick={{ fontSize: 11, fill: '#64748b' }} 
+                      tick={{ fontSize: 10, fill: '#D0D2D7' }} 
                       interval={3}
                     />
-                    <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
+                    <YAxis tick={{ fontSize: 10, fill: '#D0D2D7' }} />
                     <Tooltip 
                       content={({ active, payload, label }) => {
                         if (active && payload && payload.length) {
                           return (
-                            <div className="bg-slate-900 text-white p-2.5 rounded-lg text-xs shadow-lg space-y-1">
-                              <p className="font-bold text-slate-200">{label}</p>
-                              <p className="text-emerald-400 font-semibold">
+                            <div className="bg-[#23272B] border border-[#677580] text-[#F9FAFF] p-2.5 rounded-[6.8px] text-[10px] shadow-lg space-y-1">
+                              <p className="font-bold text-[#F9FAFF]">{label}</p>
+                              <p className="text-[#4BA9FF] font-semibold">
                                 AQI: {payload[0]?.value}
                               </p>
-                              <p className="text-slate-300">
+                              <p className="text-[#D0D2D7]">
                                 PM2.5: {payload[1]?.value} µg/m³
                               </p>
                             </div>
@@ -425,14 +420,14 @@ export default function DashboardPage() {
                     <Area 
                       type="monotone" 
                       dataKey="aqi" 
-                      stroke="#059669" 
-                      strokeWidth={2.5} 
+                      stroke="#4BA9FF" 
+                      strokeWidth={2} 
                       fill="url(#aqiGrad)" 
                     />
                     <Area 
                       type="monotone" 
                       dataKey="pm25" 
-                      stroke="#94a3b8" 
+                      stroke="#97A7B6" 
                       strokeWidth={1.5} 
                       fill="none" 
                     />
@@ -442,54 +437,54 @@ export default function DashboardPage() {
             </div>
 
             {/* 5-Day Forecast */}
-            <div className="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div className="lg:col-span-4 bg-[#39414B] p-6 rounded-[12px] border border-[#677580] flex flex-col justify-between">
               <div>
-                <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-emerald-600" />
+                <h3 className="font-bold text-[15px] text-[#F9FAFF] flex items-center gap-2 leading-[20px]">
+                  <Calendar className="w-4 h-4 text-[#4BA9FF]" />
                   5-Day Air Outlook
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-[10px] text-[#D0D2D7] mt-0.5">
                   Predictive atmospheric dispersion forecast
                 </p>
               </div>
 
               <div className="mt-4 space-y-3">
-                {airData.dailyForecast.map((day, idx) => (
+                {airData.dailyForecast.map((day) => (
                   <div
                     key={day.date}
-                    className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 border border-slate-100 transition-colors"
+                    className="flex items-center justify-between p-2.5 rounded-[6.8px] bg-[#23272B] border border-[#677580] transition-colors"
                   >
                     <div>
-                      <div className="text-xs font-bold text-slate-800">
+                      <div className="text-[12px] font-bold text-[#F9FAFF]">
                         {day.dayName}
                       </div>
-                      <div className="text-[10px] text-slate-500">
+                      <div className="text-[10px] text-[#D0D2D7]">
                         Risk: {day.primaryRisk}
                       </div>
                     </div>
 
                     <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <div className="text-xs font-extrabold text-slate-900">
+                        <div className="text-[12px] font-extrabold text-[#F9FAFF]">
                           AQI {day.avgAqi}
                         </div>
-                        <div className="text-[10px] text-slate-500 font-medium">
+                        <div className="text-[10px] text-[#CCD3D7] font-medium">
                           {day.category}
                         </div>
                       </div>
-                      <div className={`w-3 h-3 rounded-full ${
-                        day.avgAqi <= 100 ? 'bg-emerald-500' :
-                        day.avgAqi <= 200 ? 'bg-amber-500' :
-                        day.avgAqi <= 300 ? 'bg-orange-500' : 'bg-red-500'
+                      <div className={`w-2.5 h-2.5 rounded-full ${
+                        day.avgAqi <= 100 ? 'bg-[#4BA9FF]' :
+                        day.avgAqi <= 200 ? 'bg-[#EA8C34]' :
+                        day.avgAqi <= 300 ? 'bg-[#E75835]' : 'bg-[#E5484D]'
                       }`} />
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 flex items-center gap-1.5">
-                <Info className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span>Forecast values use meteorological chemistry simulation models.</span>
+              <div className="mt-4 pt-3 border-t border-[#677580] text-[10px] text-[#D0D2D7] flex items-center gap-1.5">
+                <Info className="w-3.5 h-3.5 text-[#97A7B6] shrink-0" />
+                <span>Forecast values use atmospheric numerical weather models.</span>
               </div>
             </div>
           </div>

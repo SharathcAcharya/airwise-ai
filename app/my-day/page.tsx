@@ -3,19 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
-  CalendarClock, 
   Sparkles, 
   Clock, 
   MapPin, 
-  ShieldCheck, 
   AlertTriangle, 
   CheckCircle, 
   Sliders, 
-  TrendingDown, 
-  ArrowRight,
   Sun,
   Activity,
-  Footprints,
   Train
 } from 'lucide-react';
 import { POPULAR_LOCATIONS, AirQualityResponse } from '@/lib/air-quality-service';
@@ -65,31 +60,31 @@ export default function MyDayPage() {
   return (
     <div className="space-y-6">
       {/* Signature Feature Hero */}
-      <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-lg relative overflow-hidden">
+      <div className="bg-[#39414B] border border-[#677580] text-[#F9FAFF] p-6 sm:p-8 rounded-[12px] relative overflow-hidden">
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-300 bg-emerald-800/60 px-3 py-1 rounded-full border border-emerald-700/50 mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#F9FAFF] bg-[#296AE1] px-3 py-1 rounded-[6.4px] mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-[#4BA9FF]" />
             Signature Intelligent Planner
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+          <h2 className="text-[28px] font-extrabold tracking-tight leading-[32.4px]">
             My Day, Air-Smart™
           </h2>
-          <p className="text-sm sm:text-base text-emerald-100/90 mt-2 leading-relaxed">
-            Transform raw air quality sensor values into a personalized daily schedule. We align your exercise, commute and ventilation routines with atmospheric dispersion cycles.
+          <p className="text-[12px] text-[#D0D2D7] mt-2 leading-[17.28px]">
+            Align your personal daily schedule with atmospheric chemistry. We analyze hourly forecasts to identify your lowest pollution windows for exercise, commute, and home ventilation.
           </p>
 
-          <div className="mt-5 flex flex-wrap items-center gap-4 text-xs font-semibold">
-            <div className="flex items-center gap-2 bg-white/10 px-3.5 py-1.5 rounded-xl backdrop-blur-xs">
-              <Clock className="w-4 h-4 text-emerald-300" />
+          <div className="mt-5 flex flex-wrap items-center gap-4 text-[10px] font-semibold">
+            <div className="flex items-center gap-2 bg-[#23272B] border border-[#677580] px-3.5 py-1.5 rounded-[6.8px]">
+              <Clock className="w-3.5 h-3.5 text-[#4BA9FF]" />
               <span>Exercise: {preferences.exerciseSchedule.time} ({preferences.exerciseSchedule.type.replace('-', ' ')})</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/10 px-3.5 py-1.5 rounded-xl backdrop-blur-xs">
-              <Train className="w-4 h-4 text-emerald-300" />
+            <div className="flex items-center gap-2 bg-[#23272B] border border-[#677580] px-3.5 py-1.5 rounded-[6.8px]">
+              <Train className="w-3.5 h-3.5 text-[#4BA9FF]" />
               <span>Commute: {preferences.workSchedule.start} ({preferences.commuteMode})</span>
             </div>
             <Link
               href="/preferences"
-              className="inline-flex items-center gap-1 text-emerald-300 hover:text-white transition-colors underline underline-offset-4"
+              className="inline-flex items-center gap-1 text-[#4BA9FF] hover:underline"
             >
               <Sliders className="w-3.5 h-3.5" />
               <span>Edit My Profile</span>
@@ -99,14 +94,14 @@ export default function MyDayPage() {
       </div>
 
       {/* Control & Location Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200">
-        <div className="flex items-center gap-2 text-sm font-bold text-slate-800">
-          <MapPin className="w-4 h-4 text-emerald-600" />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-4 rounded-[12px] border border-[#677580]">
+        <div className="flex items-center gap-2 text-[12px] font-bold text-[#F9FAFF]">
+          <MapPin className="w-4 h-4 text-[#4BA9FF]" />
           <span>Active Location:</span>
           <select
             value={selectedLoc}
             onChange={(e) => setSelectedLoc(e.target.value)}
-            className="bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-1.5 focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+            className="bg-[#23272B] border border-[#677580] text-[#F9FAFF] text-[12px] font-semibold rounded-[6.8px] px-3 py-1.5 focus:border-[#4BA9FF] cursor-pointer"
           >
             {POPULAR_LOCATIONS.map((loc) => (
               <option key={loc.id} value={loc.id}>
@@ -116,8 +111,8 @@ export default function MyDayPage() {
           </select>
         </div>
 
-        <div className="text-xs text-slate-500">
-          Updated: <strong className="text-slate-700">{airData ? new Date(airData.lastUpdated).toLocaleTimeString() : '...'}</strong>
+        <div className="text-[10px] text-[#D0D2D7]">
+          Updated: <strong className="text-[#F9FAFF]">{airData ? new Date(airData.lastUpdated).toLocaleTimeString() : '...'}</strong>
         </div>
       </div>
 
@@ -125,36 +120,36 @@ export default function MyDayPage() {
       {plan && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Optimal Window */}
-          <div className="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <Sun className="w-5 h-5" />
+          <div className="bg-[#39414B] border border-[#3D7AB2] p-5 rounded-[12px] flex items-start gap-4">
+            <div className="w-10 h-10 rounded-[6.8px] bg-[#296AE1] text-[#F9FAFF] flex items-center justify-center shrink-0">
+              <Sun className="w-5 h-5 text-[#4BA9FF]" />
             </div>
             <div>
-              <div className="text-xs uppercase font-extrabold tracking-wider text-emerald-800">
+              <div className="text-[10px] uppercase font-bold tracking-wider text-[#4BA9FF]">
                 Best Outdoor Opportunity
               </div>
-              <div className="text-xl font-black text-slate-900 mt-0.5">
+              <div className="text-[18px] font-bold text-[#F9FAFF] mt-0.5 leading-[24px]">
                 {plan.bestOutdoorWindow.start} – {plan.bestOutdoorWindow.end}
               </div>
-              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+              <p className="text-[12px] text-[#D0D2D7] mt-1 leading-[17.28px]">
                 Solar convective mixing thins ground pollution. Target AQI drops to ~{plan.bestOutdoorWindow.expectedAQI}. Safest window for outdoor exercise, shopping or airing living rooms.
               </p>
             </div>
           </div>
 
           {/* Highest Risk Smog Window */}
-          <div className="bg-amber-50 border border-amber-200 p-5 rounded-2xl flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+          <div className="bg-[#39414B] border border-[#EA8C34] p-5 rounded-[12px] flex items-start gap-4">
+            <div className="w-10 h-10 rounded-[6.8px] bg-[#23272B] text-[#EA8C34] border border-[#EA8C34] flex items-center justify-center shrink-0">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs uppercase font-extrabold tracking-wider text-amber-900">
+              <div className="text-[10px] uppercase font-bold tracking-wider text-[#EA8C34]">
                 Peak Exposure Window
               </div>
-              <div className="text-xl font-black text-slate-900 mt-0.5">
+              <div className="text-[18px] font-bold text-[#F9FAFF] mt-0.5 leading-[24px]">
                 {plan.highestPollutionWindow.start} – {plan.highestPollutionWindow.end}
               </div>
-              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+              <p className="text-[12px] text-[#D0D2D7] mt-1 leading-[17.28px]">
                 Atmospheric boundary layer traps particulate exhaust. Expected AQI ~{plan.highestPollutionWindow.expectedAQI}. Keep windows closed and avoid intense outdoor jogging.
               </p>
             </div>
@@ -165,61 +160,60 @@ export default function MyDayPage() {
       {/* Scheduled Activity Recommendations Breakdown */}
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-bold text-slate-900 tracking-tight">
+          <h3 className="text-[15px] font-bold text-[#F9FAFF] tracking-tight leading-[20px]">
             Schedule Alignment & Recommendations
           </h3>
-          <p className="text-xs text-slate-500">
-            Smart adaptation of your programmed daily activities with specific justification
+          <p className="text-[10px] text-[#D0D2D7]">
+            Dynamic adaptation of your programmed daily activities with specific environmental justification
           </p>
         </div>
 
         {plan?.activities.map((act) => {
-          const isOptimal = act.status === 'optimal';
           const isReschedule = act.status === 'reschedule';
           const isCaution = act.status === 'caution';
 
           return (
             <div
               key={act.id}
-              className={`p-6 rounded-2xl border transition-all ${
+              className={`p-6 rounded-[12px] border transition-colors duration-150 ${
                 isReschedule
-                  ? 'bg-red-50/60 border-red-200'
+                  ? 'bg-[#39414B] border-[#E5484D]'
                   : isCaution
-                  ? 'bg-amber-50/60 border-amber-200'
-                  : 'bg-white border-slate-200 shadow-xs'
+                  ? 'bg-[#39414B] border-[#EA8C34]'
+                  : 'bg-[#39414B] border-[#677580]'
               }`}
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#677580]">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center text-white ${
+                    className={`w-8 h-8 rounded-[6.8px] flex items-center justify-center text-[#F9FAFF] ${
                       isReschedule
-                        ? 'bg-red-600'
+                        ? 'bg-[#E5484D]'
                         : isCaution
-                        ? 'bg-amber-600'
-                        : 'bg-emerald-600'
+                        ? 'bg-[#EA8C34]'
+                        : 'bg-[#296AE1]'
                     }`}
                   >
-                    <Activity className="w-5 h-5" />
+                    <Activity className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-extrabold text-base text-slate-900">
+                    <h4 className="font-bold text-[14px] text-[#F9FAFF] leading-[19.2px]">
                       {act.activityName}
                     </h4>
-                    <span className="text-xs text-slate-500">
-                      Planned Time: <strong>{act.plannedTime}</strong>
+                    <span className="text-[10px] text-[#D0D2D7]">
+                      Planned Time: <strong className="text-[#F9FAFF]">{act.plannedTime}</strong>
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span
-                    className={`text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full ${
+                    className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-[6.4px] ${
                       isReschedule
-                        ? 'bg-red-100 text-red-800'
+                        ? 'bg-[#E5484D] text-[#F9FAFF]'
                         : isCaution
-                        ? 'bg-amber-100 text-amber-800'
-                        : 'bg-emerald-100 text-emerald-800'
+                        ? 'bg-[#EA8C34] text-[#23272B]'
+                        : 'bg-[#296AE1] text-[#F9FAFF]'
                     }`}
                   >
                     {isReschedule ? 'Reschedule Advised' : isCaution ? 'Caution Advised' : 'Optimal'}
@@ -230,23 +224,23 @@ export default function MyDayPage() {
               {/* Justification & Analysis */}
               <div className="mt-4 space-y-3">
                 <div>
-                  <h5 className="text-sm font-bold text-slate-800">
+                  <h5 className="text-[12px] font-bold text-[#F9FAFF]">
                     {act.headline}
                   </h5>
-                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  <p className="text-[12px] text-[#D0D2D7] mt-1 leading-[17.28px]">
                     {act.explanation}
                   </p>
                 </div>
 
                 {/* Practical Action Items */}
-                <div className="bg-white/80 p-3.5 rounded-xl border border-slate-200/80 space-y-1.5">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                <div className="bg-[#23272B] p-3.5 rounded-[6.8px] border border-[#677580] space-y-1.5">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-[#4BA9FF]">
                     Recommended Actions:
                   </div>
-                  <ul className="space-y-1 text-xs text-slate-600">
+                  <ul className="space-y-1 text-[12px] text-[#D0D2D7]">
                     {act.actionItems.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <CheckCircle className="w-3.5 h-3.5 text-emerald-600 mt-0.5 shrink-0" />
+                        <CheckCircle className="w-3.5 h-3.5 text-[#4BA9FF] mt-0.5 shrink-0" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -255,17 +249,17 @@ export default function MyDayPage() {
 
                 {/* Indoor Alternative or Sustainable choice */}
                 {(act.indoorAlternative || act.sustainableChoice) && (
-                  <div className="flex flex-col sm:flex-row gap-3 pt-2 text-xs">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2 text-[10px]">
                     {act.indoorAlternative && (
-                      <div className="flex-1 bg-slate-100/70 p-2.5 rounded-lg border border-slate-200/60">
-                        <span className="font-bold text-slate-800">Indoor Alternative: </span>
-                        <span className="text-slate-600">{act.indoorAlternative}</span>
+                      <div className="flex-1 bg-[#23272B] p-2.5 rounded-[6.4px] border border-[#677580]">
+                        <span className="font-bold text-[#F9FAFF]">Indoor Alternative: </span>
+                        <span className="text-[#D0D2D7]">{act.indoorAlternative}</span>
                       </div>
                     )}
                     {act.sustainableChoice && (
-                      <div className="flex-1 bg-emerald-100/60 p-2.5 rounded-lg border border-emerald-200/60 text-emerald-900">
-                        <span className="font-bold">Eco Action: </span>
-                        <span>{act.sustainableChoice}</span>
+                      <div className="flex-1 bg-[#23272B] p-2.5 rounded-[6.4px] border border-[#3D7AB2] text-[#F9FAFF]">
+                        <span className="font-bold text-[#4BA9FF]">Eco Action: </span>
+                        <span className="text-[#D0D2D7]">{act.sustainableChoice}</span>
                       </div>
                     )}
                   </div>

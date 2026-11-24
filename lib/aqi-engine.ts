@@ -176,52 +176,52 @@ export function getAQIColor(category: AQICategory) {
   switch (category) {
     case 'Good':
       return {
-        bg: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-        text: 'text-emerald-700',
-        border: 'border-emerald-500',
-        accent: '#10b981',
+        bg: 'bg-[#23272B] text-[#4BA9FF] border-[#3D7AB2]',
+        text: 'text-[#4BA9FF]',
+        border: 'border-[#3D7AB2]',
+        accent: '#4BA9FF',
       };
     case 'Satisfactory':
       return {
-        bg: 'bg-lime-50 text-lime-800 border-lime-200',
-        text: 'text-lime-700',
-        border: 'border-lime-500',
-        accent: '#84cc16',
+        bg: 'bg-[#39414B] text-[#F9FAFF] border-[#677580]',
+        text: 'text-[#F9FAFF]',
+        border: 'border-[#677580]',
+        accent: '#3D7AB2',
       };
     case 'Moderate':
       return {
-        bg: 'bg-amber-50 text-amber-800 border-amber-200',
-        text: 'text-amber-700',
-        border: 'border-amber-500',
-        accent: '#f59e0b',
+        bg: 'bg-[#39414B] text-[#EA8C34] border-[#EA8C34]',
+        text: 'text-[#EA8C34]',
+        border: 'border-[#EA8C34]',
+        accent: '#EA8C34',
       };
     case 'Poor':
       return {
-        bg: 'bg-orange-50 text-orange-800 border-orange-200',
-        text: 'text-orange-700',
-        border: 'border-orange-500',
-        accent: '#f97316',
+        bg: 'bg-[#39414B] text-[#E75835] border-[#E75835]',
+        text: 'text-[#E75835]',
+        border: 'border-[#E75835]',
+        accent: '#E75835',
       };
     case 'Very Poor':
       return {
-        bg: 'bg-red-50 text-red-800 border-red-200',
-        text: 'text-red-700',
-        border: 'border-red-500',
-        accent: '#ef4444',
+        bg: 'bg-[#39414B] text-[#E5484D] border-[#E5484D]',
+        text: 'text-[#E5484D]',
+        border: 'border-[#E5484D]',
+        accent: '#E5484D',
       };
     case 'Severe':
       return {
-        bg: 'bg-purple-900 text-purple-100 border-purple-700',
-        text: 'text-purple-600',
-        border: 'border-purple-800',
-        accent: '#7e22ce',
+        bg: 'bg-[#23272B] text-[#F9FAFF] border-[#E5484D]',
+        text: 'text-[#E5484D]',
+        border: 'border-[#E5484D]',
+        accent: '#E5484D',
       };
     default:
       return {
-        bg: 'bg-slate-100 text-slate-800 border-slate-200',
-        text: 'text-slate-600',
-        border: 'border-slate-300',
-        accent: '#64748b',
+        bg: 'bg-[#39414B] text-[#CCD3D7] border-[#677580]',
+        text: 'text-[#CCD3D7]',
+        border: 'border-[#677580]',
+        accent: '#97A7B6',
       };
   }
 }

@@ -3,47 +3,43 @@
 import React, { useState } from 'react';
 import { 
   MapPin, 
-  Layers, 
   Info, 
   AlertCircle, 
-  ExternalLink, 
   Navigation, 
   ShieldCheck,
-  TrendingUp,
   Compass
 } from 'lucide-react';
 import { POPULAR_LOCATIONS } from '@/lib/air-quality-service';
 
 export default function ExposureExplorerPage() {
   const [selectedStation, setSelectedStation] = useState(POPULAR_LOCATIONS[0]);
-  const [filterLevel, setFilterLevel] = useState<'all' | 'high' | 'moderate'>('all');
 
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-              <Compass className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
+              <Compass className="w-3.5 h-3.5 text-[#4BA9FF]" />
               Regional Environmental Explorer
             </span>
-            <span className="text-xs text-slate-400">•</span>
-            <span className="text-xs text-slate-500 font-medium">Urban Monitoring Stations</span>
+            <span className="text-[10px] text-[#97A7B6]">•</span>
+            <span className="text-[10px] text-[#D0D2D7] font-semibold">Urban Monitoring Stations</span>
           </div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
+          <h2 className="text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[32.4px]">
             Exposure & Monitoring Grid
           </h2>
-          <p className="text-sm text-slate-600 mt-0.5">
-            Compare validated monitoring locations and citizen pollution hotspot alerts.
+          <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
+            Compare continuous monitoring locations across India and citizen pollution observations.
           </p>
         </div>
 
-        {/* Resolution Disclosure Warning */}
-        <div className="flex items-center gap-2 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 max-w-md">
-          <Info className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>
-            <strong>Resolution Notice:</strong> CAMS global atmospheric chemistry models operate at ~40 km grid resolution (0.4° × 0.4°). Street-level micro-meteorology is indicative and does not replace continuous CAAQMS sensors.
+        {/* Resolution Disclosure */}
+        <div className="flex items-center gap-2 px-3.5 py-2.5 bg-[#23272B] border border-[#677580] rounded-[6.8px] text-[10px] text-[#D0D2D7] max-w-md">
+          <Info className="w-4 h-4 text-[#4BA9FF] shrink-0" />
+          <span className="leading-[13.6px]">
+            <strong>Resolution Notice:</strong> CAMS global atmospheric chemistry models operate at ~40 km grid resolution (0.4° × 0.4°). Street-level micro-meteorology is indicative.
           </span>
         </div>
       </div>
@@ -51,41 +47,41 @@ export default function ExposureExplorerPage() {
       {/* Main Grid View */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Interactive Station Roster */}
-        <div className="lg:col-span-5 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col h-[600px]">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h3 className="font-extrabold text-slate-900 text-sm">
+        <div className="lg:col-span-5 bg-[#39414B] p-5 rounded-[12px] border border-[#677580] flex flex-col h-[600px]">
+          <div className="flex items-center justify-between pb-3 border-b border-[#677580]">
+            <h3 className="font-extrabold text-[#F9FAFF] text-[14px] leading-[19.2px]">
               Monitored Urban Clusters ({POPULAR_LOCATIONS.length})
             </h3>
-            <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-bold text-[#4BA9FF] bg-[#23272B] border border-[#677580] px-2 py-0.5 rounded-[6.4px]">
               CPCB Ground Network
             </span>
           </div>
 
-          <div className="flex-1 overflow-y-auto divide-y divide-slate-100 mt-2">
+          <div className="flex-1 overflow-y-auto divide-y divide-[#677580] mt-2">
             {POPULAR_LOCATIONS.map((loc) => {
               const isSelected = selectedStation.id === loc.id;
               return (
                 <button
                   key={loc.id}
                   onClick={() => setSelectedStation(loc)}
-                  className={`w-full text-left p-3.5 transition-all rounded-xl my-1 flex items-start justify-between cursor-pointer ${
+                  className={`w-full text-left p-3.5 transition-colors rounded-[6.8px] my-1 flex items-start justify-between cursor-pointer ${
                     isSelected
-                      ? 'bg-emerald-50 border border-emerald-200 text-emerald-950 shadow-xs'
-                      : 'hover:bg-slate-50 text-slate-700'
+                      ? 'bg-[#296AE1] text-[#F9FAFF] border border-[#4BA9FF]'
+                      : 'hover:bg-[#555555] text-[#D0D2D7]'
                   }`}
                 >
                   <div className="space-y-1">
-                    <div className="font-bold text-sm flex items-center gap-1.5">
-                      <MapPin className={`w-3.5 h-3.5 ${isSelected ? 'text-emerald-700' : 'text-slate-400'}`} />
+                    <div className="font-bold text-[12px] flex items-center gap-1.5 text-[#F9FAFF]">
+                      <MapPin className={`w-3.5 h-3.5 ${isSelected ? 'text-[#F9FAFF]' : 'text-[#4BA9FF]'}`} />
                       <span>{loc.name}</span>
                     </div>
-                    <div className="text-xs text-slate-500">
+                    <div className="text-[10px] text-[#CCD3D7]">
                       {loc.state}, India • Coord: {loc.latitude.toFixed(2)}°N, {loc.longitude.toFixed(2)}°E
                     </div>
                   </div>
 
                   <div className="text-right">
-                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
+                    <span className="text-[8px] uppercase font-bold px-2 py-0.5 bg-[#23272B] text-[#D0D2D7] rounded-[6.4px] border border-[#677580]">
                       Continuous
                     </span>
                   </div>
@@ -97,108 +93,105 @@ export default function ExposureExplorerPage() {
 
         {/* Station Detail & Route Exposure View */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Station In-Depth Card */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+          <div className="bg-[#39414B] p-6 rounded-[12px] border border-[#677580]">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#4BA9FF]">
                   Selected Cluster Station
                 </span>
-                <h3 className="text-2xl font-black text-slate-900 mt-0.5">
+                <h3 className="text-[22px] font-extrabold text-[#F9FAFF] mt-0.5 leading-[27.6px]">
                   {selectedStation.name}
                 </h3>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-[10px] text-[#D0D2D7] mt-1">
                   Latitude: {selectedStation.latitude} | Longitude: {selectedStation.longitude}
                 </p>
               </div>
 
               <div className="text-right">
-                <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-1 rounded-[6.4px]">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#4BA9FF]" />
                   Live Sync
                 </span>
               </div>
             </div>
 
-            {/* Geographical Context & Hotspot Alerts */}
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              <div className="bg-[#23272B] p-4 rounded-[6.8px] border border-[#677580]">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#4BA9FF]">
                   Data Freshness & Provenance
                 </div>
-                <div className="text-base font-extrabold text-slate-900 mt-1">
+                <div className="text-[15px] font-bold text-[#F9FAFF] mt-1">
                   10-Minute Polling Cycle
                 </div>
-                <p className="text-xs text-slate-600 mt-1">
-                  Data synchronized via Open-Meteo European and CPCB telemetry stations.
+                <p className="text-[10px] text-[#D0D2D7] mt-1 leading-[13.6px]">
+                  Synchronized via Open-Meteo CAMS Global atmospheric models.
                 </p>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              <div className="bg-[#23272B] p-4 rounded-[6.8px] border border-[#677580]">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#4BA9FF]">
                   Primary Emission Characteristics
                 </div>
-                <div className="text-base font-extrabold text-slate-900 mt-1">
+                <div className="text-[15px] font-bold text-[#F9FAFF] mt-1">
                   Combustion & Road Dust
                 </div>
-                <p className="text-xs text-slate-600 mt-1">
-                  High sensitivity to peak-hour vehicular rush and wind calm periods.
+                <p className="text-[10px] text-[#D0D2D7] mt-1 leading-[13.6px]">
+                  High sensitivity to peak vehicular congestion and wind calm periods.
                 </p>
               </div>
             </div>
 
-            {/* Route Comparison Module (Strictly Disclosed As Unavailable without hyper-local sensors) */}
-            <div className="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-              <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
-                <Navigation className="w-4 h-4 text-emerald-600" />
+            <div className="mt-6 p-4 rounded-[6.8px] bg-[#23272B] border border-[#677580] space-y-2">
+              <div className="flex items-center gap-2 text-[#F9FAFF] font-bold text-[12px]">
+                <Navigation className="w-4 h-4 text-[#4BA9FF]" />
                 <span>Street-Level Route Exposure Comparison</span>
               </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-[10px] text-[#D0D2D7] leading-[15.2px]">
                 Hyper-local street-by-street micro-route pollution comparison is currently <strong>unavailable</strong>. Official CPCB and meteorological satellites measure regional grids rather than street-corner microclimates.
               </p>
-              <div className="text-[11px] text-slate-500 italic">
+              <div className="text-[8px] text-[#CCD3D7] italic">
                 * AIRWISE AI does not invent simulated street routes without dense localized sensor nodes.
               </div>
             </div>
           </div>
 
           {/* Citizen Community Reports in This Region */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+          <div className="bg-[#39414B] p-6 rounded-[12px] border border-[#677580]">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="font-bold text-base text-slate-900">
+              <h4 className="font-bold text-[14px] text-[#F9FAFF]">
                 Citizen Hotspot Reports in Vicinity
               </h4>
-              <span className="text-xs text-slate-500">
-                Crowdsourced Smoke & Dust Observations
+              <span className="text-[10px] text-[#D0D2D7]">
+                Crowdsourced Observations
               </span>
             </div>
 
             <div className="space-y-3">
-              <div className="p-3 bg-red-50/70 border border-red-200 rounded-xl flex items-start gap-3">
-                <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 shrink-0" />
-                <div className="text-xs">
-                  <div className="font-bold text-slate-900">
+              <div className="p-3 bg-[#23272B] border border-[#E5484D] rounded-[6.8px] flex items-start gap-3">
+                <AlertCircle className="w-4 h-4 text-[#E5484D] mt-0.5 shrink-0" />
+                <div className="text-[12px]">
+                  <div className="font-bold text-[#F9FAFF]">
                     Visible Municipal Waste Burning
                   </div>
-                  <p className="text-slate-600 mt-0.5">
+                  <p className="text-[#D0D2D7] mt-0.5 leading-[17.28px]">
                     Thick grey smoke observed near highway interchange. Reported by 24 citizens within 2 km.
                   </p>
-                  <div className="text-[10px] text-slate-500 mt-1">
+                  <div className="text-[8px] text-[#CCD3D7] mt-1">
                     Status: Unverified Citizen Report • 2 hours ago
                   </div>
                 </div>
               </div>
 
-              <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl flex items-start gap-3">
-                <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-                <div className="text-xs">
-                  <div className="font-bold text-slate-900">
+              <div className="p-3 bg-[#23272B] border border-[#EA8C34] rounded-[6.8px] flex items-start gap-3">
+                <AlertCircle className="w-4 h-4 text-[#EA8C34] mt-0.5 shrink-0" />
+                <div className="text-[12px]">
+                  <div className="font-bold text-[#F9FAFF]">
                     Flyover Expansion Aggregate Dust
                   </div>
-                  <p className="text-slate-600 mt-0.5">
+                  <p className="text-[#D0D2D7] mt-0.5 leading-[17.28px]">
                     High suspended particulate drift from uncovered dry earthmoving operations.
                   </p>
-                  <div className="text-[10px] text-slate-500 mt-1">
+                  <div className="text-[8px] text-[#CCD3D7] mt-1">
                     Status: Unverified Citizen Report • 5 hours ago
                   </div>
                 </div>

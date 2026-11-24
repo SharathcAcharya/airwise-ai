@@ -1,26 +1,271 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Primary Reference Design System Tokens (AQI.IN Spec) */
+    --bg-dark: #23272B;          /* color-1 */
+    --bg-surface: #39414B;       /* --bg */
+    --bg-subtle: #555555;        /* --bg-color */
+    --bg-light: #F9FAFF;         /* --border-light / light card background */
+    
+    /* Text Tokens */
+    --text-primary: #F9FAFF;     /* Crisp high-contrast on dark surfaces */
+    --text-secondary: #D0D2D7;   /* color-14: secondary descriptive text */
+    --text-muted: #CCD3D7;       /* color-13: subdued caption text */
+    --text-dark: #23272B;        /* color-1: dark text on light backgrounds */
+    
+    /* Accent & Brand Tokens */
+    --brand-primary: #4BA9FF;    /* --primary-color */
+    --brand-accent: #296AE1;     /* --color */
+    --color-blue-subtle: #3D7AB2;/* color-6 */
+    
+    /* Functional Severity Palette */
+    --color-severity-red: #E5484D;    /* color-7 */
+    --color-severity-vermilion: #E75835;/* color-8 */
+    --color-severity-amber: #EA8C34;  /* color-9 */
+    
+    /* Borders & Dividers */
+    --border-dark: #677580;      /* --border */
+    --border-mid: #97A7B6;       /* --border secondary */
+    --border-purple: #A3A3C8;    /* color-12 */
+    --border-light: #D8DAE6;     /* color-15 */
+    --border-subtle: #E5E7EB;    /* color-16 */
+    
+    /* Typography Font Stack */
+    --font-primary: __primaryFont_096ea8, "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    
+    /* Standard Shapes (Border Radii) */
+    --radius-sm: 6.4px;
+    --radius-md: 6.8px;
+    --radius-lg: 10.88px;
+    --radius-xl: 12px;
+    --radius-card-top: 13.6px 13.6px 0px 0px;
+    --radius-2xl: 16px;
+    --radius-full: 9999px;
+
+    /* Transitions & Motion */
+    --transition-standard: color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Reusable Design System Utility Classes */
+.aqi-card-surface {
+  background-color: #39414B;
+  border: 1px solid #677580;
+  border-radius: 12px;
+  color: #F9FAFF;
+  transition: var(--transition-standard);
+}
+
+.aqi-card-surface:hover {
+  border-color: #97A7B6;
+}
+
+.aqi-card-dark {
+  background-color: #23272B;
+  border: 1px solid #677580;
+  border-radius: 12px;
+  color: #F9FAFF;
+}
+
+.aqi-card-light {
+  background-color: #F9FAFF;
+  border: 1px solid #D8DAE6;
+  border-radius: 12px;
+  color: #23272B;
+}
+
+/* Standardized Button Variants */
+.aqi-btn-primary {
+  background-color: #296AE1;
+  color: #F9FAFF;
+  border: 1px solid transparent;
+  border-radius: 6.8px;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: var(--transition-standard);
+}
+
+.aqi-btn-primary:hover:not(:disabled) {
+  background-color: #3D7AB2;
+  box-shadow: 0 0 0 2px rgba(75, 169, 255, 0.25);
+}
+
+.aqi-btn-primary:focus-visible {
+  outline: 2px solid #4BA9FF;
+  outline-offset: 2px;
+}
+
+.aqi-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.aqi-btn-secondary {
+  background-color: #555555;
+  color: #F9FAFF;
+  border: 1px solid #677580;
+  border-radius: 6.8px;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: var(--transition-standard);
+}
+
+.aqi-btn-secondary:hover:not(:disabled) {
+  background-color: #677580;
+  border-color: #97A7B6;
+}
+
+.aqi-btn-secondary:focus-visible {
+  outline: 2px solid #4BA9FF;
+  outline-offset: 2px;
+}
+
+.aqi-btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.aqi-btn-outline {
+  background-color: transparent;
+  color: #4BA9FF;
+  border: 1px solid #4BA9FF;
+  border-radius: 6.8px;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: var(--transition-standard);
+}
+
+.aqi-btn-outline:hover:not(:disabled) {
+  background-color: rgba(75, 169, 255, 0.12);
+  border-color: #296AE1;
+  color: #F9FAFF;
+}
+
+.aqi-btn-outline:focus-visible {
+  outline: 2px solid #4BA9FF;
+  outline-offset: 2px;
+}
+
+.aqi-btn-danger {
+  background-color: #E5484D;
+  color: #F9FAFF;
+  border: 1px solid transparent;
+  border-radius: 6.8px;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: var(--transition-standard);
+}
+
+.aqi-btn-danger:hover:not(:disabled) {
+  background-color: #E75835;
+}
+
+.aqi-btn-danger:focus-visible {
+  outline: 2px solid #E5484D;
+  outline-offset: 2px;
+}
+
+/* Form Controls */
+.aqi-input {
+  background-color: #23272B;
+  border: 1px solid #677580;
+  border-radius: 6.8px;
+  color: #F9FAFF;
+  font-size: 12px;
+  padding: 8px 12px;
+  transition: var(--transition-standard);
+}
+
+.aqi-input:hover {
+  border-color: #97A7B6;
+}
+
+.aqi-input:focus {
+  outline: none;
+  border-color: #4BA9FF;
+  box-shadow: 0 0 0 1px #4BA9FF;
+}
+
+.aqi-input::placeholder {
+  color: #D0D2D7;
+  opacity: 0.6;
+}
+
+/* Badges */
+.aqi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6.4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.aqi-badge-good {
+  background-color: #3D7AB2;
+  color: #F9FAFF;
+  border: 1px solid #4BA9FF;
+}
+
+.aqi-badge-moderate {
+  background-color: #EA8C34;
+  color: #23272B;
+}
+
+.aqi-badge-poor {
+  background-color: #E75835;
+  color: #F9FAFF;
+}
+
+.aqi-badge-severe {
+  background-color: #E5484D;
+  color: #F9FAFF;
 }

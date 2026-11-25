@@ -452,6 +452,11 @@ export default function NotificationsPage() {
                         <span className="text-[10px] text-[#97A7B6]">
                           Driver: {alert.dominantPollutant}
                         </span>
+                        {alert.isSampleData && (
+                          <span className="text-[8.5px] font-bold px-1.5 py-0.2 rounded-[4px] bg-[#23272B] text-[#4BA9FF] border border-[#296AE1]">
+                            Demo Alert
+                          </span>
+                        )}
                       </div>
                       <p className="text-[11.5px] text-[#D0D2D7] mt-1 leading-relaxed">
                         {alert.message}

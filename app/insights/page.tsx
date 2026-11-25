@@ -80,7 +80,7 @@ export default function InsightsPage() {
   const weeklyTrend = airData?.dailyForecast && airData.dailyForecast.length > 0
     ? [
         {
-          day: 'Today',
+          day: 'Today (Mean)',
           aqi: meanAqi,
           category: airData.current?.category || 'Moderate',
           dominant: airData.current?.dominantPollutant?.toUpperCase() || 'PM2.5',
@@ -103,7 +103,7 @@ export default function InsightsPage() {
         { day: 'Thu', aqi: Math.max(30, meanAqi + 10), category: 'Moderate', dominant: 'PM2.5', isForecast: false, isModelBaseline: true },
         { day: 'Fri', aqi: Math.max(30, meanAqi - 20), category: 'Satisfactory', dominant: 'PM2.5', isForecast: false, isModelBaseline: true },
         { day: 'Sat', aqi: Math.max(30, meanAqi + 5), category: 'Moderate', dominant: 'PM10', isForecast: false, isModelBaseline: true },
-        { day: 'Today', aqi: meanAqi, category: airData?.current?.category || 'Moderate', dominant: airData?.current?.dominantPollutant?.toUpperCase() || 'PM2.5', isForecast: false, isModelBaseline: true },
+        { day: 'Today (Mean)', aqi: meanAqi, category: airData?.current?.category || 'Moderate', dominant: airData?.current?.dominantPollutant?.toUpperCase() || 'PM2.5', isForecast: false, isModelBaseline: true },
       ];
 
   const handlePrint = () => {
@@ -273,7 +273,7 @@ export default function InsightsPage() {
         >
           {weeklyTrend.map((item, idx) => {
             const heightPercent = Math.min(100, Math.max(15, (item.aqi / 300) * 100));
-            const isToday = item.day === 'Today';
+            const isToday = item.day.startsWith('Today');
             return (
               <div key={idx} className="flex flex-col items-center gap-2">
                 <span className="text-[11px] font-black text-[#F9FAFF] print:text-gray-800">

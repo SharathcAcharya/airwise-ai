@@ -271,7 +271,7 @@ export default function CommunityReportsPage() {
         <div>
           <p className="font-bold text-[#F9FAFF]">Transparent Citizen Sourced Data Policy:</p>
           <p className="mt-0.5 text-[#CCD3D7] leading-relaxed">
-            {t('community.disclaimer', 'Citizen reports represent crowd-sourced ground observations. They complement satellite model forecasts and CAAQMS stations.')}
+            {t('community.disclaimer', 'Citizen reports represent crowd-sourced ground observations. The initial reports displayed are demonstration examples to preview citizen reporting workflows; new reports submitted in your browser are saved to your local device.')}
           </p>
         </div>
       </div>
@@ -443,9 +443,16 @@ export default function CommunityReportsPage() {
             {activeReport ? (
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
-                  <span className="text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-[4px] bg-[#23272B] text-[#D0D2D7] border border-[#677580]">
-                    {activeReport.category.replace('_', ' ')}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-[4px] bg-[#23272B] text-[#D0D2D7] border border-[#677580]">
+                      {activeReport.category.replace('_', ' ')}
+                    </span>
+                    {activeReport.isSampleData && (
+                      <span className="text-[8.5px] font-bold px-1.5 py-0.5 rounded-[4px] bg-[#23272B] text-[#4BA9FF] border border-[#296AE1]">
+                        Sample Incident
+                      </span>
+                    )}
+                  </div>
                   {(() => {
                     const badge = getStatusBadge(activeReport.verificationStatus, activeReport.isVerified);
                     return (
@@ -550,9 +557,16 @@ export default function CommunityReportsPage() {
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-2">
-                    <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-[4px] bg-[#23272B] text-[#D0D2D7] border border-[#677580]">
-                      {rep.category.replace('_', ' ')}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-[4px] bg-[#23272B] text-[#D0D2D7] border border-[#677580]">
+                        {rep.category.replace('_', ' ')}
+                      </span>
+                      {rep.isSampleData && (
+                        <span className="text-[8.5px] font-bold px-1.5 py-0.5 rounded-[4px] bg-[#23272B] text-[#4BA9FF] border border-[#296AE1]">
+                          Sample Incident
+                        </span>
+                      )}
+                    </div>
                     <span className={`text-[8.5px] font-bold px-2 py-0.5 rounded-[4px] ${badge.bg} ${badge.text}`}>
                       {badge.label}
                     </span>

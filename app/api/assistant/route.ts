@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
 You are the AIRWISE AI Personal Environmental Intelligence Assistant.
 Your mission is to help urban citizens make smart, safe, and sustainable daily decisions regarding air pollution.
 
-CURRENT VERIFIED ENVIRONMENTAL CONTEXT (From Sensors & CPCB Engine):
+CURRENT VERIFIED ENVIRONMENTAL CONTEXT (From CAMS Atmospheric Model Estimates & CPCB Equation Engine):
 - Location: ${environmentalContext?.locationName || 'Urban Center, India'}
 - Indian National AQI: ${environmentalContext?.aqi ?? environmentalContext?.indicativeAqi ?? 'Data Unavailable'} (${environmentalContext?.category || 'Unknown'})
 - Dominant Pollutant: ${environmentalContext?.dominantPollutant?.toUpperCase() || 'N/A'}
@@ -107,49 +107,53 @@ CRITICAL GUIDELINES:
 3. Do NOT provide medical diagnosis or individual clinical treatment. Always provide general public-health guidance and remind users to consult physicians for personal medical conditions.
 4. If asked about causes of pollution, discuss realistic regional factors (vehicular exhaust, biomass/stubble burning, construction dust, thermal inversion) without claiming unverified speculative blame.
 5. Format your response cleanly with bullet points and bold highlights for readability.
+6. Environmental figures reflect Copernicus CAMS global atmospheric model estimates (~40 km grid) and CPCB linear breakpoint sub-index formulas. Never claim connection to physical on-site sensor hardware or local CAAQMS continuous monitors unless explicitly designated.
 `.trim();
 
-    if (!apiKey) {
-      // Graceful server-side fallback rule-based intelligence when GEMINI_API_KEY is not set in environment
-      const ruleBasedReply = generateRuleBasedResponse(
-        latestUserMessage,
-        environmentalContext,
-        userProfile,
-        userLanguage
-      );
-      return NextResponse.json({
-        reply: ruleBasedReply,
-        model: 'AirWise Rule-Based Environmental Engine (No API key configured)',
-        isFallback: true,
-      });
+    let candidateText: string | null = null;
+    let modelName = 'Google Gemini 1.5 Flash';
+
+    if (apiKey) {
+      try {
+        // Call Google Gemini API (gemini-1.5-flash) with 8-second safety timeout
+        const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+        const conversationHistory = messages.slice(-8).map((m: ChatMessage) => ({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content.slice(0, 1000) }],
+        }));
+
+        const response = await fetch(geminiEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(8000),
+          body: JSON.stringify({
+            system_instruction: {
+              parts: [{ text: contextPrompt }],
+            },
+            contents: conversationHistory,
+            generationConfig: {
+              temperature: 0.3,
+              maxOutputTokens: 800,
+            },
+          }),
+        });
+
+        if (response.ok) {
+          const geminiData = await response.json();
+          candidateText =
+            geminiData.candidates?.[0]?.content?.parts?.[0]?.text || null;
+        } else {
+          const errText = await response.text();
+          console.warn('Gemini API request non-200, using intelligent rule engine fallback:', errText);
+        }
+      } catch (geminiErr) {
+        console.warn('Gemini API fetch error or timeout, falling back to rule engine:', geminiErr);
+      }
     }
 
-    // Call Google Gemini API (gemini-1.5-flash)
-    const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-    const conversationHistory = messages.slice(-8).map((m: ChatMessage) => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content.slice(0, 1000) }],
-    }));
-
-    const response = await fetch(geminiEndpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system_instruction: {
-          parts: [{ text: contextPrompt }],
-        },
-        contents: conversationHistory,
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 800,
-        },
-      }),
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      console.warn('Gemini API request failed, using intelligent rule engine fallback:', errText);
+    if (!candidateText) {
+      // Graceful server-side fallback rule-based intelligence
       const fallbackReply = generateRuleBasedResponse(
         latestUserMessage,
         environmentalContext,
@@ -158,19 +162,16 @@ CRITICAL GUIDELINES:
       );
       return NextResponse.json({
         reply: fallbackReply,
-        model: 'AirWise Rule-Based Fallback',
+        model: apiKey
+          ? 'AirWise Rule-Based Fallback'
+          : 'AirWise Rule-Based Environmental Engine (No API key configured)',
         isFallback: true,
       });
     }
 
-    const geminiData = await response.json();
-    const candidateText =
-      geminiData.candidates?.[0]?.content?.parts?.[0]?.text ||
-      'I was unable to generate an environmental analysis. Please try again.';
-
     return NextResponse.json({
       reply: candidateText,
-      model: 'Google Gemini 1.5 Flash',
+      model: modelName,
       isFallback: false,
     });
   } catch (err) {

@@ -51,6 +51,7 @@ export interface CommunityReport {
   isVerified: boolean; // Must always be explicitly marked as citizen report
   verificationStatus: 'unverified' | 'under_review' | 'verified' | 'resolved';
   imageUrl?: string;
+  isSampleData?: boolean;
 }
 
 export interface AQIAlert {
@@ -63,6 +64,7 @@ export interface AQIAlert {
   timestamp: string;
   read: boolean;
   severity: 'info' | 'warning' | 'critical';
+  isSampleData?: boolean;
 }
 
 export interface GreenChallenge {
@@ -119,6 +121,7 @@ export const INITIAL_COMMUNITY_REPORTS: CommunityReport[] = [
     upvotes: 24,
     isVerified: false,
     verificationStatus: 'under_review',
+    isSampleData: true,
   },
   {
     id: 'rep-2',
@@ -133,6 +136,7 @@ export const INITIAL_COMMUNITY_REPORTS: CommunityReport[] = [
     upvotes: 18,
     isVerified: true,
     verificationStatus: 'verified',
+    isSampleData: true,
   },
   {
     id: 'rep-3',
@@ -147,6 +151,7 @@ export const INITIAL_COMMUNITY_REPORTS: CommunityReport[] = [
     upvotes: 9,
     isVerified: false,
     verificationStatus: 'unverified',
+    isSampleData: true,
   },
   {
     id: 'rep-4',
@@ -161,6 +166,7 @@ export const INITIAL_COMMUNITY_REPORTS: CommunityReport[] = [
     upvotes: 31,
     isVerified: true,
     verificationStatus: 'resolved',
+    isSampleData: true,
   },
   {
     id: 'rep-5',
@@ -175,6 +181,7 @@ export const INITIAL_COMMUNITY_REPORTS: CommunityReport[] = [
     upvotes: 14,
     isVerified: false,
     verificationStatus: 'unverified',
+    isSampleData: true,
   },
 ];
 
@@ -223,6 +230,7 @@ export const INITIAL_ALERTS: AQIAlert[] = [
     timestamp: new Date(Date.now() - 3600000 * 3).toISOString(),
     read: false,
     severity: 'warning',
+    isSampleData: true,
   },
   {
     id: 'alert-2',
@@ -234,6 +242,7 @@ export const INITIAL_ALERTS: AQIAlert[] = [
     timestamp: new Date(Date.now() - 3600000 * 14).toISOString(),
     read: true,
     severity: 'info',
+    isSampleData: true,
   },
   {
     id: 'alert-3',
@@ -245,6 +254,7 @@ export const INITIAL_ALERTS: AQIAlert[] = [
     timestamp: new Date(Date.now() - 3600000 * 28).toISOString(),
     read: true,
     severity: 'critical',
+    isSampleData: true,
   },
 ];
 

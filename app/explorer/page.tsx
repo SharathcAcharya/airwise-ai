@@ -79,7 +79,7 @@ export default function ExposureExplorerPage() {
               Monitored Urban Clusters ({POPULAR_LOCATIONS.length})
             </h3>
             <span className="text-[10px] font-bold text-[#4BA9FF] bg-[#23272B] border border-[#677580] px-2 py-0.5 rounded-[6.4px]">
-              CPCB Ground Network
+              CAMS Regional Model Grid
             </span>
           </div>
 
@@ -108,7 +108,7 @@ export default function ExposureExplorerPage() {
 
                   <div className="text-right">
                     <span className="text-[8px] uppercase font-bold px-2 py-0.5 bg-[#23272B] text-[#D0D2D7] rounded-[6.4px] border border-[#677580]">
-                      Continuous
+                      Regional Node
                     </span>
                   </div>
                 </button>
@@ -147,10 +147,10 @@ export default function ExposureExplorerPage() {
                   Data Freshness & Provenance
                 </div>
                 <div className="text-[15px] font-bold text-[#F9FAFF] mt-1">
-                  10-Minute Polling Cycle
+                  CAMS Regional Model Grid
                 </div>
                 <p className="text-[10px] text-[#D0D2D7] mt-1 leading-[13.6px]">
-                  Synchronized via Open-Meteo CAMS Global atmospheric models.
+                  Telemetry reflects Copernicus Atmosphere Monitoring Service (CAMS) regional model simulations (~40 km grid) processed via CPCB sub-index equations.
                 </p>
               </div>
 
@@ -196,14 +196,17 @@ export default function ExposureExplorerPage() {
               <div className="p-3 bg-[#23272B] border border-[#E5484D] rounded-[6.8px] flex items-start gap-3">
                 <AlertCircle className="w-4 h-4 text-[#E5484D] mt-0.5 shrink-0" />
                 <div className="text-[12px]">
-                  <div className="font-bold text-[#F9FAFF]">
-                    Visible Municipal Waste Burning
+                  <div className="flex items-center gap-2 font-bold text-[#F9FAFF]">
+                    <span>Visible Municipal Waste Burning</span>
+                    <span className="text-[8.5px] font-bold px-1.5 py-0.2 rounded-[4px] bg-[#39414B] text-[#4BA9FF] border border-[#296AE1]">
+                      Sample Demo Hotspot
+                    </span>
                   </div>
                   <p className="text-[#D0D2D7] mt-0.5 leading-[17.28px]">
                     Thick grey smoke observed near highway interchange. Reported by 24 citizens within 2 km.
                   </p>
                   <div className="text-[8px] text-[#CCD3D7] mt-1">
-                    Status: Unverified Citizen Report • 2 hours ago
+                    Status: Illustrative Demo Report • 2 hours ago
                   </div>
                 </div>
               </div>
@@ -211,14 +214,17 @@ export default function ExposureExplorerPage() {
               <div className="p-3 bg-[#23272B] border border-[#EA8C34] rounded-[6.8px] flex items-start gap-3">
                 <AlertCircle className="w-4 h-4 text-[#EA8C34] mt-0.5 shrink-0" />
                 <div className="text-[12px]">
-                  <div className="font-bold text-[#F9FAFF]">
-                    Flyover Expansion Aggregate Dust
+                  <div className="flex items-center gap-2 font-bold text-[#F9FAFF]">
+                    <span>Flyover Expansion Aggregate Dust</span>
+                    <span className="text-[8.5px] font-bold px-1.5 py-0.2 rounded-[4px] bg-[#39414B] text-[#4BA9FF] border border-[#296AE1]">
+                      Sample Demo Hotspot
+                    </span>
                   </div>
                   <p className="text-[#D0D2D7] mt-0.5 leading-[17.28px]">
                     High suspended particulate drift from uncovered dry earthmoving operations.
                   </p>
                   <div className="text-[8px] text-[#CCD3D7] mt-1">
-                    Status: Unverified Citizen Report • 5 hours ago
+                    Status: Illustrative Demo Report • 5 hours ago
                   </div>
                 </div>
               </div>

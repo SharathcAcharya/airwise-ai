@@ -88,7 +88,7 @@ export default function AssistantPage() {
     {
       id: 'msg-init',
       role: 'assistant',
-      content: `### Welcome to AirWise Environmental AI Assistant\n\nI am connected to your live location sensors and CPCB air quality calculations. Ask me anything about:\n- Safe outdoor activity and exercise timing\n- Health precautions for children and asthma sensitivities\n- Environmental causes of current pollution\n- Sustainable low-carbon alternatives\n\nHow can I help you plan your day?`,
+      content: `### Welcome to AirWise Environmental AI Assistant\n\nI am connected to Copernicus CAMS atmospheric models (~40 km resolution) and CPCB linear sub-index calculations for your selected location. Ask me anything about:\n- Safe outdoor activity and exercise timing\n- Health precautions for children and asthma sensitivities\n- Environmental causes of current pollution\n- Sustainable low-carbon alternatives\n\nHow can I help you plan your day?`,
     },
   ]);
   const [input, setInput] = useState('');

@@ -485,7 +485,7 @@ export default function CommutePlannerPage() {
                           <div>
                             <div className="text-[13px] font-extrabold text-[#209040] flex items-center gap-1 sm:justify-end">
                               <Leaf className="w-3.5 h-3.5" />
-                              <span>-{opt.co2SavedKg} kg CO2e</span>
+                              <span>{opt.co2SavedKg} kg CO2e saved</span>
                             </div>
                             <div className="text-[10px] text-[#4BA9FF] font-bold">
                               +{opt.ecoPoints} Eco-Points
@@ -493,7 +493,7 @@ export default function CommutePlannerPage() {
                           </div>
                         ) : (
                           <div className="text-[11px] text-[#E5484D] font-semibold">
-                            0 CO2 Saved (High Impact)
+                            0 kg CO2e saved (Baseline Emission Mode)
                           </div>
                         )}
                       </div>
@@ -530,6 +530,16 @@ export default function CommutePlannerPage() {
                 </div>
               );
             })}
+          </div>
+
+          <div className="p-3.5 bg-[#23272B] border border-[#677580] rounded-[8px] text-[10.5px] text-[#D0D2D7] space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-[#F9FAFF]">
+              <Info className="w-3.5 h-3.5 text-[#4BA9FF]" />
+              <span>Carbon Savings Calculation Methodology</span>
+            </div>
+            <p className="leading-relaxed text-[#CCD3D7]">
+              Estimates compare transit options against a standard private passenger car baseline of 170g CO2/km (averaging ~22g for Metro, ~55g for Electric/CNG Bus, and 0g for Bicycle/Walking). Distances represent realistic modeled urban travel corridors.
+            </p>
           </div>
         </div>
       )}

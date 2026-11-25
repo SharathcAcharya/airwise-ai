@@ -23,6 +23,7 @@ interface LocationContextType {
   isOffline: boolean;
   cachedTelemetryTime: string | null;
   setCachedTelemetryTime: (time: string) => void;
+  isDemonstrationDefault: boolean;
 }
 
 const STORAGE_KEY = 'airwise_selected_location';
@@ -73,6 +74,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
   const [isHydrated, setIsHydrated] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [cachedTelemetryTime, setCachedTelemetryTimeState] = useState<string | null>(null);
+  const [isDemonstrationDefault, setIsDemonstrationDefault] = useState(true);
 
   // Restore saved location & family places from localStorage safely
   useEffect(() => {
@@ -88,6 +90,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
           !isNaN(parsed.longitude)
         ) {
           setCurrentLocation(parsed);
+          setIsDemonstrationDefault(false);
         }
       }
 
@@ -133,6 +136,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
 
   const setLocation = (loc: LocationInfo) => {
     setCurrentLocation(loc);
+    setIsDemonstrationDefault(false);
     setGpsError(null);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(loc));
@@ -232,6 +236,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
         isOffline,
         cachedTelemetryTime,
         setCachedTelemetryTime,
+        isDemonstrationDefault,
       }}
     >
       {children}

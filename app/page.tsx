@@ -29,7 +29,16 @@ import { useLocation } from '@/context/LocationContext';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function DashboardPage() {
-  const { currentLocation, setLocation, savedLocations, setCachedTelemetryTime } = useLocation();
+  const {
+    currentLocation,
+    setLocation,
+    savedLocations,
+    setCachedTelemetryTime,
+    isDemonstrationDefault,
+    requestCurrentPosition,
+    isLoadingGPS,
+    isHydrated,
+  } = useLocation();
   const { t } = useLanguage();
   const [airData, setAirData] = useState<AirQualityResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -117,6 +126,27 @@ export default function DashboardPage() {
           </button>
         </div>
       </div>
+
+      {/* Demonstration Default Onboarding Banner */}
+      {isHydrated && isDemonstrationDefault && (
+        <div className="bg-[#2B313A] border border-[#296AE1] p-3.5 rounded-[10px] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[12px] text-[#D0D2D7] shadow-sm">
+          <div className="flex items-center gap-2.5">
+            <Info className="w-4 h-4 text-[#4BA9FF] shrink-0" />
+            <span>
+              <strong className="text-[#F9FAFF]">Demonstration Default Location:</strong> Currently showing{' '}
+              <span className="text-[#4BA9FF] font-semibold">{currentLocation.name}</span> as initial baseline. Use <strong>Location Search</strong> or <strong>Locate Me (GPS)</strong> to load your city&apos;s live air quality.
+            </span>
+          </div>
+          <button
+            onClick={requestCurrentPosition}
+            disabled={isLoadingGPS}
+            className="aqi-btn-primary text-[11px] py-1.5 px-3 flex items-center gap-1.5 shrink-0 self-start sm:self-auto"
+          >
+            <Compass className={`w-3.5 h-3.5 ${isLoadingGPS ? 'animate-spin' : ''}`} />
+            <span>{isLoadingGPS ? 'Locating...' : 'Locate Me (GPS)'}</span>
+          </button>
+        </div>
+      )}
 
       {/* Saved Places Quick Switcher Bar */}
       {savedLocations.length > 0 && (

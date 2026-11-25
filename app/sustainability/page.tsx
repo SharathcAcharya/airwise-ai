@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { 
   Leaf, 
   Award, 
@@ -132,20 +133,32 @@ export default function SustainabilityPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580]">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
-              <Leaf className="w-3.5 h-3.5 text-[#4BA9FF]" />
-              Sustainability & Emission Abatement
-            </span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580] shadow-sm">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-[12px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-xs shrink-0">
+            <Image
+              src="/airwise-logo-icon.png"
+              alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+              width={42}
+              height={42}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
-          <h2 className="text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[32.4px]">
-            Eco-Action & Habit Tracker
-          </h2>
-          <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
-            Log sustainable mobility decisions to reduce personal urban tailpipe exposure.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
+                <Leaf className="w-3.5 h-3.5 text-[#4BA9FF]" />
+                Sustainability & Emission Abatement
+              </span>
+            </div>
+            <h2 className="text-[22px] sm:text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[28px] sm:leading-[32.4px]">
+              Eco-Action & Habit Tracker
+            </h2>
+            <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
+              Log sustainable mobility decisions to reduce personal urban tailpipe exposure.
+            </p>
+          </div>
         </div>
 
         <button

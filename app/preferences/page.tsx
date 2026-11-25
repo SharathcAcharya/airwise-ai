@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { 
   Sliders, 
   Save, 
@@ -8,11 +9,15 @@ import {
   HeartPulse, 
   Clock, 
   Train, 
-  RotateCcw
+  RotateCcw,
+  MapPin
 } from 'lucide-react';
 import { DEFAULT_PREFERENCES, UserPreferences } from '@/lib/store';
+import LocationSearch from '@/components/LocationSearch';
+import { useLocation } from '@/context/LocationContext';
 
 export default function PreferencesPage() {
+  const { currentLocation, setLocation } = useLocation();
   const [prefs, setPrefs] = useState<UserPreferences>(DEFAULT_PREFERENCES);
   const [savedNotice, setSavedNotice] = useState(false);
 
@@ -48,20 +53,32 @@ export default function PreferencesPage() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580]">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
-              <Sliders className="w-3.5 h-3.5 text-[#4BA9FF]" />
-              User Profile Configuration
-            </span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580] shadow-sm">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-[12px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-xs shrink-0">
+            <Image
+              src="/airwise-logo-icon.png"
+              alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+              width={42}
+              height={42}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
-          <h2 className="text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[32.4px]">
-            Personalization & Sensitivity Settings
-          </h2>
-          <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
-            Customize your schedule and health sensitivity profile to tailor My Day, Air-Smart™ plans.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
+                <Sliders className="w-3.5 h-3.5 text-[#4BA9FF]" />
+                User Profile Configuration
+              </span>
+            </div>
+            <h2 className="text-[22px] sm:text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[28px] sm:leading-[32.4px]">
+              Personalization & Sensitivity Settings
+            </h2>
+            <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
+              Customize your schedule and health sensitivity profile to tailor My Day, Air-Smart™ plans.
+            </p>
+          </div>
         </div>
 
         {savedNotice && (
@@ -73,6 +90,27 @@ export default function PreferencesPage() {
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
+        {/* Default Saved City / Area */}
+        <div className="bg-[#39414B] p-6 rounded-[12px] border border-[#677580] space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-[6.8px] bg-[#23272B] text-[#4BA9FF] flex items-center justify-center border border-[#677580]">
+              <MapPin className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="font-bold text-[15px] text-[#F9FAFF] leading-[20px]">
+                Primary Monitored Location
+              </h3>
+              <p className="text-[10px] text-[#D0D2D7]">
+                Your home base city or locality used across all dashboard and planner views
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <LocationSearch />
+          </div>
+        </div>
+
         {/* Health Sensitivity Profile */}
         <div className="bg-[#39414B] p-6 rounded-[12px] border border-[#677580] space-y-4">
           <div className="flex items-center gap-3">

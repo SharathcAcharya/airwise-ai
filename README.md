@@ -20,7 +20,7 @@ Urban citizens in developing nations, particularly across Indian metropolitan cl
 ## 🚀 Key Modules & Capabilities
 
 ### 1. Smart Dashboard
-- **Live Location Selector & GPS Integration:** Real-time lookup for major metropolitan cities across India (Delhi Anand Vihar, Connaught Place, Mumbai BKC, Bengaluru Whitefield, Kolkata, Chennai, Hyderabad, Pune, etc.) with browser geolocation.
+- **Dynamic Geocoding Search & GPS Integration:** Real-time search across any Indian city, town, or locality (e.g. Mangaluru, Kankanady, Udupi, Bengaluru, Mysuru, Mumbai, Kochi, Delhi) powered by Open-Meteo Geocoding API with debounced autocomplete, Indian priority ranking, and instant browser GPS geolocation.
 - **CPCB Indian National AQI:** True sub-index calculation conforming strictly to Central Pollution Control Board (CPCB) methodology.
 - **6 Core Pollutants:** PM2.5, PM10, NO2, SO2, CO, and Ground Ozone (O3) with individual linear sub-indices, units, and clear dominant pollutant identification.
 - **24-Hour Trend & 5-Day Outlook:** Atmospheric dispersion charts (Recharts) and 5-day predictive forecasts.
@@ -68,7 +68,8 @@ Urban citizens in developing nations, particularly across Indian metropolitan cl
 
 - **Framework:** Next.js (App Router, Turbopack)
 - **Language:** TypeScript
-- **Styling:** Tailwind CSS (Modern clean design system: emerald accents, slate typography, rounded cards, subtle transitions)
+- **Styling & Brand:** Tailwind CSS v4, official Eco-Tech design system tokens, standardized typography scale, WCAG 2.2 AA contrast compliance, responsive mobile/tablet/desktop layouts
+- **Brand Assets:** Official AIRWISE AI Eco-Tech Logo, high-resolution derived icon mark, OpenGraph social card, and App Router metadata icons
 - **Visualization:** Recharts & Lucide React
 - **Environmental APIs:** Open-Meteo Air Quality API (CAMS Global model) with OpenAQ telemetry compatibility
 - **AI Engine:** Google Gemini 1.5 Flash via server-side API routes

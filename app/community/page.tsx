@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { 
   AlertTriangle, 
   MapPin, 
@@ -10,16 +11,22 @@ import {
   Plus
 } from 'lucide-react';
 import { CommunityReport, INITIAL_COMMUNITY_REPORTS } from '@/lib/store';
+import { useLocation } from '@/context/LocationContext';
 
 export default function CommunityReportsPage() {
+  const { currentLocation } = useLocation();
   const [reports, setReports] = useState<CommunityReport[]>(INITIAL_COMMUNITY_REPORTS);
   const [showReportForm, setShowReportForm] = useState(false);
 
   const [category, setCategory] = useState<CommunityReport['category']>('garbage_burning');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [locationName, setLocationName] = useState('Anand Vihar, Delhi');
+  const [locationName, setLocationName] = useState(currentLocation.name);
   const [severity, setSeverity] = useState<CommunityReport['severity']>('high');
+
+  useEffect(() => {
+    setLocationName(currentLocation.name);
+  }, [currentLocation]);
 
   useEffect(() => {
     try {
@@ -58,8 +65,8 @@ export default function CommunityReportsPage() {
       title: title.trim(),
       description: description.trim(),
       locationName: locationName.trim(),
-      latitude: 28.65,
-      longitude: 77.31,
+      latitude: currentLocation.latitude,
+      longitude: currentLocation.longitude,
       severity,
       reportedAt: new Date().toISOString(),
       upvotes: 1,
@@ -75,20 +82,32 @@ export default function CommunityReportsPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580]">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
-              <AlertTriangle className="w-3.5 h-3.5 text-[#EA8C34]" />
-              Citizen Environmental Watch
-            </span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580] shadow-sm">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-[12px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-xs shrink-0">
+            <Image
+              src="/airwise-logo-icon.png"
+              alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+              width={42}
+              height={42}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
-          <h2 className="text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[32.4px]">
-            Community Pollution Hotspot Reports
-          </h2>
-          <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
-            Crowdsourced observation feed for open waste burning, construction dust and localized plumes.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
+                <AlertTriangle className="w-3.5 h-3.5 text-[#EA8C34]" />
+                Citizen Environmental Watch
+              </span>
+            </div>
+            <h2 className="text-[22px] sm:text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[28px] sm:leading-[32.4px]">
+              Community Pollution Hotspot Reports
+            </h2>
+            <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
+              Crowdsourced observation feed for open waste burning, construction dust and localized plumes.
+            </p>
+          </div>
         </div>
 
         <button

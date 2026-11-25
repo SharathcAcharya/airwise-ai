@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { 
   Wind, 
@@ -13,7 +14,8 @@ import {
   Sliders, 
   Menu, 
   X,
-  ShieldCheck
+  ShieldCheck,
+  Sparkles
 } from 'lucide-react';
 
 interface NavItem {
@@ -41,15 +43,29 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-[#23272B] flex flex-col md:flex-row text-[#F9FAFF] font-sans antialiased">
       {/* Mobile Top Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-[#39414B] border-b border-[#677580] sticky top-0 z-50">
-        <Link href="/" className="flex items-center gap-2 font-bold text-sm text-[#F9FAFF] tracking-tight">
-          <div className="w-8 h-8 rounded-[6.8px] bg-[#296AE1] flex items-center justify-center text-[#F9FAFF]">
-            <Wind className="w-4 h-4" />
+        <Link href="/" className="flex items-center gap-2.5 font-bold text-sm text-[#F9FAFF] tracking-tight group focus-visible:outline-2 focus-visible:outline-[#4BA9FF] rounded-[6.8px]">
+          <div className="w-8 h-8 rounded-[6.8px] bg-[#F9FAFF] p-1 flex items-center justify-center border border-[#97A7B6] shadow-xs shrink-0 group-hover:scale-105 transition-transform">
+            <Image
+              src="/airwise-logo-icon.png"
+              alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+              width={26}
+              height={26}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
-          <span>AIRWISE AI</span>
+          <div className="flex flex-col">
+            <span className="font-extrabold tracking-tight text-[15px] leading-tight text-[#F9FAFF]">
+              AIRWISE <span className="text-[#4BA9FF]">AI</span>
+            </span>
+            <span className="text-[9px] text-[#A3A3C8] font-medium leading-none">
+              Breathe Smarter
+            </span>
+          </div>
         </Link>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 rounded-[6.4px] text-[#D0D2D7] hover:bg-[#555555] transition-colors"
+          className="p-2 rounded-[6.4px] text-[#D0D2D7] hover:bg-[#555555] transition-colors focus-visible:outline-2 focus-visible:outline-[#4BA9FF]"
           aria-label="Toggle menu"
         >
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -62,18 +78,27 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Brand Header */}
-        <div className="p-6 border-b border-[#677580] flex items-center gap-3">
-          <div className="w-10 h-10 rounded-[10.88px] bg-[#296AE1] flex items-center justify-center text-[#F9FAFF] shadow-xs">
-            <Wind className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="font-extrabold text-[18px] text-[#F9FAFF] tracking-tight flex items-center gap-1.5 leading-[22.4px]">
-              AIRWISE <span className="text-[#4BA9FF]">AI</span>
-            </h1>
-            <p className="text-[10px] text-[#D0D2D7] font-semibold tracking-wider uppercase leading-[13.6px]">
-              Breathe Smarter
-            </p>
-          </div>
+        <div className="p-5 border-b border-[#677580]">
+          <Link href="/" className="flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-[#4BA9FF] rounded-[10.88px] p-1 -m-1">
+            <div className="w-11 h-11 rounded-[10.88px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-xs group-hover:border-[#4BA9FF] group-hover:scale-105 transition-all shrink-0">
+              <Image
+                src="/airwise-logo-icon.png"
+                alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+                width={38}
+                height={38}
+                className="w-full h-full object-contain"
+                priority
+              />
+            </div>
+            <div className="flex flex-col">
+              <h1 className="font-extrabold text-[17px] text-[#F9FAFF] tracking-tight flex items-center gap-1 leading-[20px]">
+                AIRWISE <span className="text-[#4BA9FF]">AI</span>
+              </h1>
+              <p className="text-[9.5px] text-[#A3A3C8] font-semibold tracking-wider uppercase leading-[13px] mt-0.5">
+                Eco-Tech Intelligence
+              </p>
+            </div>
+          </Link>
         </div>
 
         {/* Navigation Links */}
@@ -107,8 +132,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        {/* CPCB Standard Verification Footer */}
-        <div className="p-4 border-t border-[#677580] bg-[#23272B] m-3 rounded-[10.88px]">
+        {/* CPCB Standard Verification & Tagline Footer */}
+        <div className="p-3.5 border-t border-[#677580] bg-[#23272B] m-3 rounded-[10.88px] space-y-2">
           <div className="flex items-start gap-2.5">
             <ShieldCheck className="w-4 h-4 text-[#4BA9FF] mt-0.5 shrink-0" />
             <div className="text-[10px] text-[#D0D2D7]">
@@ -118,6 +143,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               </p>
             </div>
           </div>
+          <p className="text-[9px] text-[#A3A3C8] italic pt-1 border-t border-[#39414B] text-center leading-tight">
+            "Breathe Smarter. Move Safer. Live Greener."
+          </p>
         </div>
       </aside>
 
@@ -128,18 +156,48 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </main>
 
         {/* Global Footer */}
-        <footer className="border-t border-[#677580] bg-[#39414B] py-6 px-6 text-center text-[10px] text-[#CCD3D7]">
-          <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="leading-[15.2px]">
-              &copy; 2026 <span className="font-bold text-[#F9FAFF]">AIRWISE AI</span>. "Breathe Smarter. Move Safer. Live Greener."
-            </p>
-            <div className="flex items-center gap-4 text-[#D0D2D7]">
-              <span>CPCB Indian Standards</span>
-              <span>•</span>
-              <span>CAMS Global Forecast (~40 km)</span>
-              <span>•</span>
-              <span>Google Gemini 1.5</span>
+        <footer className="border-t border-[#677580] bg-[#39414B] py-6 px-6 text-[10px] text-[#CCD3D7]">
+          <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            {/* Brand Lockup */}
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-[8px] bg-[#F9FAFF] p-1 flex items-center justify-center border border-[#97A7B6] shadow-xs shrink-0">
+                <Image
+                  src="/airwise-logo-icon.png"
+                  alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+                  width={28}
+                  height={28}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="text-left">
+                <div className="font-extrabold text-[13px] text-[#F9FAFF] tracking-tight flex items-center gap-1.5 leading-tight">
+                  AIRWISE <span className="text-[#4BA9FF]">AI</span>
+                </div>
+                <p className="text-[10px] text-[#A3A3C8] leading-tight">
+                  Breathe Smarter. Move Safer. Live Greener.
+                </p>
+              </div>
             </div>
+
+            {/* Platform Provenance Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-2 text-[10px] text-[#D0D2D7]">
+              <span className="px-2 py-0.5 rounded-[6.4px] bg-[#23272B] border border-[#677580]">
+                CPCB Indian Standard
+              </span>
+              <span>•</span>
+              <span className="px-2 py-0.5 rounded-[6.4px] bg-[#23272B] border border-[#677580]">
+                CAMS Global Model (~40 km)
+              </span>
+              <span>•</span>
+              <span className="px-2 py-0.5 rounded-[6.4px] bg-[#23272B] border border-[#677580]">
+                Google Gemini 1.5
+              </span>
+            </div>
+
+            {/* Copyright */}
+            <p className="leading-[15.2px] text-[#CCD3D7]">
+              &copy; 2026 <span className="font-bold text-[#F9FAFF]">AIRWISE AI</span>. All rights reserved.
+            </p>
           </div>
         </footer>
       </div>

@@ -19,14 +19,35 @@ export async function GET(request: NextRequest) {
         lon = found.longitude;
         locName = found.name;
       }
-    } else if (latStr && lonStr) {
+    } else if (latStr !== null && lonStr !== null) {
       const parsedLat = parseFloat(latStr);
       const parsedLon = parseFloat(lonStr);
-      if (!isNaN(parsedLat) && !isNaN(parsedLon)) {
-        lat = parsedLat;
-        lon = parsedLon;
-        locName = searchParams.get('name') || `Custom Location (${lat.toFixed(2)}, ${lon.toFixed(2)})`;
+
+      // Validate geographic coordinate boundaries
+      if (isNaN(parsedLat) || isNaN(parsedLon)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Invalid coordinates: latitude and longitude must be numbers.',
+          },
+          { status: 400 }
+        );
       }
+
+      if (parsedLat < -90 || parsedLat > 90 || parsedLon < -180 || parsedLon > 180) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Coordinates out of bounds: latitude must be between -90 and 90, longitude between -180 and 180.',
+          },
+          { status: 400 }
+        );
+      }
+
+      lat = parsedLat;
+      lon = parsedLon;
+      const rawName = searchParams.get('name') || '';
+      locName = rawName.slice(0, 100) || `Location (${lat.toFixed(2)}°N, ${lon.toFixed(2)}°E)`;
     }
 
     const data = await fetchAirQualityData(lat, lon, locName);
@@ -35,12 +56,12 @@ export async function GET(request: NextRequest) {
       success: true,
       data,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('API Error in /api/air-quality:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to retrieve air quality data. Please retry.',
+        error: error.message || 'Failed to retrieve air quality data. Please retry.',
       },
       { status: 500 }
     );

@@ -41,6 +41,22 @@ The color system is defined via CSS custom properties in [globals.css](file:///d
 | `--primary-color` | `#4BA9FF` | Primary action hover, links, focus rings, Good AQI |
 | `--color` | `#296AE1` | Primary CTA button background, active nav item |
 | `--color-6` | `#3D7AB2` | Secondary accent, Satisfactory AQI, optimal time windows |
+| `--brand-eco-green` | `#209040` | Eco-action points, sustainability badges |
+| `--brand-eco-emerald` | `#108040` | Environmental health accents |
+| `--brand-eco-cyan` | `#00A3E0` | Atmosphere cyan highlight |
+| `--brand-eco-navy` | `#002850` | Official logo master navy |
+
+### 2.2 Brand Identity & Official Logo Assets
+- **Master Asset:** `public/Airwise AI Eco-Tech Logo.png` (1536×1024, 8-bit RGBA, transparent background).
+- **Derived Icon Mark:** `public/airwise-logo-icon.png` (512×512 square format, pixel-precise emblem).
+- **Next.js App Router Metadata Icons:** `app/icon.png` (512×512) and `app/apple-icon.png` (180×180).
+- **Favicon:** `public/favicon-32x32.png` (32×32).
+- **OpenGraph Social Preview:** `public/airwise-og.png` (1200×630, high-res social preview card).
+- **Required Alt Text:** `AIRWISE AI — Breathe Smarter. Move Safer. Live Greener.`
+- **Design Guidelines:**
+  - Placed in high-contrast containers (`.aqi-logo-badge`) on dark surfaces to ensure maximum legibility of dark text elements.
+  - Aspect ratio preserved strictly without distortion.
+  - Branded emblem utilized for mobile top bar, desktop sidebar, loading states, and AI Assistant avatar.
 
 #### CPCB Environmental Status Tokens (Approved Palette Mappings)
 | CPCB Category | AQI Range | Token Name | Hex Value | Text Pairing |

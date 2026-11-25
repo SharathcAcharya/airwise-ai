@@ -18,6 +18,10 @@
     --brand-primary: #4BA9FF;    /* --primary-color */
     --brand-accent: #296AE1;     /* --color */
     --color-blue-subtle: #3D7AB2;/* color-6 */
+    --brand-eco-green: #209040;  /* Official logo eco-green */
+    --brand-eco-emerald: #108040;/* Official logo dark emerald */
+    --brand-eco-cyan: #00A3E0;   /* Official logo atmosphere cyan */
+    --brand-eco-navy: #002850;   /* Official logo dark text navy */
     
     /* Functional Severity Palette */
     --color-severity-red: #E5484D;    /* color-7 */
@@ -268,4 +272,36 @@
 .aqi-badge-severe {
   background-color: #E5484D;
   color: #F9FAFF;
+}
+
+/* Official Logo & Brand Styling */
+.aqi-logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F9FAFF;
+  border: 1px solid #97A7B6;
+  border-radius: 10.88px;
+  padding: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: var(--transition-standard);
+  flex-shrink: 0;
+}
+
+.aqi-logo-badge:hover {
+  border-color: #4BA9FF;
+  box-shadow: 0 0 0 2px rgba(75, 169, 255, 0.25);
+}
+
+.aqi-badge-eco {
+  background-color: rgba(32, 144, 64, 0.18);
+  color: #4BA9FF;
+  border: 1px solid rgba(75, 169, 255, 0.35);
+}
+
+.aqi-logo-card {
+  background: linear-gradient(135deg, rgba(57, 65, 75, 0.9) 0%, rgba(35, 39, 43, 0.95) 100%);
+  border: 1px solid #677580;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }

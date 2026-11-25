@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { 
   Bot, 
   Send, 
@@ -11,7 +12,9 @@ import {
   HelpCircle,
   ArrowRight
 } from 'lucide-react';
-import { POPULAR_LOCATIONS, AirQualityResponse } from '@/lib/air-quality-service';
+import { AirQualityResponse } from '@/lib/air-quality-service';
+import LocationSearch from '@/components/LocationSearch';
+import { useLocation } from '@/context/LocationContext';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -29,6 +32,7 @@ const PRESET_QUESTIONS = [
 ];
 
 export default function AssistantPage() {
+  const { currentLocation } = useLocation();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -38,13 +42,13 @@ export default function AssistantPage() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [airData, setAirData] = useState<AirQualityResponse | null>(null);
-  const [selectedLoc, setSelectedLoc] = useState('delhi-anand-vihar');
   const chatBottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function loadEnv() {
       try {
-        const res = await fetch(`/api/air-quality?locId=${selectedLoc}`);
+        const query = `lat=${currentLocation.latitude}&lon=${currentLocation.longitude}&name=${encodeURIComponent(currentLocation.name)}`;
+        const res = await fetch(`/api/air-quality?${query}`);
         const data = await res.json();
         if (data.success) {
           setAirData(data.data);
@@ -54,7 +58,7 @@ export default function AssistantPage() {
       }
     }
     loadEnv();
-  }, [selectedLoc]);
+  }, [currentLocation]);
 
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -133,38 +137,40 @@ export default function AssistantPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580]">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
-              <Sparkles className="w-3.5 h-3.5 text-[#4BA9FF]" />
-              Verified Gemini AI Assistant
-            </span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580] shadow-sm">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-[12px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-xs shrink-0">
+            <Image
+              src="/airwise-logo-icon.png"
+              alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+              width={42}
+              height={42}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
-          <h2 className="text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[32.4px]">
-            Personal Environmental Advisory
-          </h2>
-          <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
-            Grounded strictly in verified CPCB readings and public health advisories.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
+                <Sparkles className="w-3.5 h-3.5 text-[#4BA9FF]" />
+                Verified Gemini AI Assistant
+              </span>
+            </div>
+            <h2 className="text-[22px] sm:text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[28px] sm:leading-[32.4px]">
+              Personal Environmental Advisory
+            </h2>
+            <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
+              Grounded strictly in verified CPCB readings and public health advisories.
+            </p>
+          </div>
         </div>
 
         {/* Location Context Switcher */}
-        <div className="flex items-center gap-2">
-          <label className="text-[10px] font-bold text-[#D0D2D7] uppercase tracking-wider">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <span className="text-[10px] font-bold text-[#D0D2D7] uppercase tracking-wider">
             Context:
-          </label>
-          <select
-            value={selectedLoc}
-            onChange={(e) => setSelectedLoc(e.target.value)}
-            className="bg-[#23272B] border border-[#677580] text-[#F9FAFF] text-[12px] font-semibold rounded-[6.8px] px-3 py-2 cursor-pointer focus:border-[#4BA9FF]"
-          >
-            {POPULAR_LOCATIONS.map((loc) => (
-              <option key={loc.id} value={loc.id}>
-                {loc.name}
-              </option>
-            ))}
-          </select>
+          </span>
+          <LocationSearch />
         </div>
       </div>
 
@@ -201,11 +207,21 @@ export default function AssistantPage() {
                   <div
                     className={`w-8 h-8 rounded-[6.8px] flex items-center justify-center shrink-0 ${
                       isAssistant
-                        ? 'bg-[#296AE1] text-[#F9FAFF]'
+                        ? 'bg-[#F9FAFF] p-0.5 border border-[#97A7B6] shadow-xs'
                         : 'bg-[#555555] text-[#F9FAFF]'
                     }`}
                   >
-                    {isAssistant ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
+                    {isAssistant ? (
+                      <Image
+                        src="/airwise-logo-icon.png"
+                        alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+                        width={26}
+                        height={26}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <User className="w-4 h-4" />
+                    )}
                   </div>
 
                   <div
@@ -232,8 +248,14 @@ export default function AssistantPage() {
 
             {loading && (
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-[6.8px] bg-[#296AE1] text-[#F9FAFF] flex items-center justify-center animate-pulse">
-                  <Bot className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-[6.8px] bg-[#F9FAFF] p-0.5 border border-[#97A7B6] shadow-xs flex items-center justify-center shrink-0 animate-pulse">
+                  <Image
+                    src="/airwise-logo-icon.png"
+                    alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+                    width={26}
+                    height={26}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <div className="bg-[#39414B] border border-[#677580] px-4 py-3 rounded-[10.88px] text-[10px] text-[#D0D2D7] flex items-center gap-2">
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#4BA9FF]" />

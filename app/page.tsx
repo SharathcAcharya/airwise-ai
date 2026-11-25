@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Wind, 
   MapPin, 
@@ -22,27 +23,23 @@ import {
   Tooltip, 
   ResponsiveContainer
 } from 'recharts';
-import { POPULAR_LOCATIONS, AirQualityResponse } from '@/lib/air-quality-service';
+import { POPULAR_LOCATIONS, AirQualityResponse, LocationInfo } from '@/lib/air-quality-service';
+import LocationSearch from '@/components/LocationSearch';
+import { useLocation } from '@/context/LocationContext';
 
 export default function DashboardPage() {
-  const [selectedLocId, setSelectedLocId] = useState<string>('delhi-anand-vihar');
+  const { currentLocation, setLocation } = useLocation();
   const [airData, setAirData] = useState<AirQualityResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [geoLocating, setGeoLocating] = useState<boolean>(false);
 
-  // Load air quality data
-  const loadData = async (locId?: string, lat?: number, lon?: number, customName?: string) => {
+  // Load air quality data for location
+  const loadData = async (loc?: LocationInfo) => {
+    const target = loc || currentLocation;
     setLoading(true);
     setError(null);
     try {
-      let query = '';
-      if (lat !== undefined && lon !== undefined) {
-        query = `lat=${lat}&lon=${lon}&name=${encodeURIComponent(customName || 'My Location')}`;
-      } else {
-        query = `locId=${locId || selectedLocId}`;
-      }
-
+      const query = `lat=${target.latitude}&lon=${target.longitude}&name=${encodeURIComponent(target.name)}`;
       const res = await fetch(`/api/air-quality?${query}`);
       const json = await res.json();
       if (json.success && json.data) {
@@ -58,28 +55,8 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    loadData(selectedLocId);
-  }, [selectedLocId]);
-
-  // Browser Geolocation
-  const handleUseCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.');
-      return;
-    }
-    setGeoLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setGeoLocating(false);
-        loadData(undefined, pos.coords.latitude, pos.coords.longitude, 'Current Location');
-      },
-      (err) => {
-        setGeoLocating(false);
-        alert(`Location permission denied or unavailable: ${err.message}`);
-      },
-      { timeout: 10000 }
-    );
-  };
+    loadData(currentLocation);
+  }, [currentLocation]);
 
   const current = airData?.current;
   const aqiVal = current?.indicativeAqi ?? current?.aqi;
@@ -89,76 +66,98 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner & Location Switcher */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580]">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#4BA9FF] animate-pulse"></span>
-              Live Environmental Feed
-            </span>
-            <span className="text-[10px] text-[#97A7B6]">•</span>
-            <span className="text-[10px] text-[#D0D2D7] font-semibold">CPCB Methodology</span>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580] shadow-sm">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-[12px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-xs shrink-0">
+            <Image
+              src="/airwise-logo-icon.png"
+              alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+              width={42}
+              height={42}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
-          <h2 className="text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[32.4px]">
-            Urban Air Quality Intelligence
-          </h2>
-          <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
-            Real-time pollutant breakdown, CPCB breakpoint sub-indices and daily action plans.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4BA9FF] animate-pulse"></span>
+                Live Environmental Feed
+              </span>
+              <span className="text-[10px] text-[#97A7B6]">•</span>
+              <span className="text-[10px] text-[#D0D2D7] font-semibold">CPCB Methodology</span>
+            </div>
+            <h2 className="text-[22px] sm:text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[28px] sm:leading-[32.4px]">
+              Urban Air Quality Intelligence
+            </h2>
+            <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
+              Real-time pollutant breakdown, CPCB breakpoint sub-indices and daily action plans.
+            </p>
+          </div>
         </div>
 
-        {/* Location Selector Controls */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="relative">
-            <select
-              value={selectedLocId}
-              onChange={(e) => setSelectedLocId(e.target.value)}
-              className="appearance-none bg-[#23272B] hover:bg-[#555555] border border-[#677580] text-[#F9FAFF] text-[12px] font-semibold rounded-[6.8px] pl-3.5 pr-8 py-2.5 focus:outline-hidden focus:border-[#4BA9FF] transition-colors cursor-pointer"
-            >
-              {POPULAR_LOCATIONS.map((loc) => (
-                <option key={loc.id} value={loc.id}>
-                  {loc.name}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#97A7B6]">
-              <Compass className="w-4 h-4" />
-            </div>
-          </div>
+        {/* Dynamic Location Search & Controls */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <LocationSearch
+            onLocationSelect={(loc) => {
+              loadData(loc);
+            }}
+          />
 
           <button
-            onClick={handleUseCurrentLocation}
-            disabled={geoLocating}
-            className="aqi-btn-outline"
-          >
-            <MapPin className="w-3.5 h-3.5 text-[#4BA9FF]" />
-            <span>{geoLocating ? 'Locating...' : 'Use GPS'}</span>
-          </button>
-
-          <button
-            onClick={() => loadData(selectedLocId)}
-            className="p-2.5 text-[#F9FAFF] hover:bg-[#555555] bg-[#23272B] border border-[#677580] rounded-[6.8px] transition-colors cursor-pointer"
+            onClick={() => loadData(currentLocation)}
+            className="p-2.5 text-[#F9FAFF] hover:bg-[#555555] bg-[#23272B] border border-[#677580] hover:border-[#4BA9FF] rounded-[6.8px] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[#4BA9FF]"
             title="Refresh Readings"
+            aria-label="Refresh Air Quality Data"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#4BA9FF]' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#4BA9FF]' : 'text-[#D0D2D7]'}`} />
           </button>
         </div>
       </div>
 
       {/* Error Alert */}
       {error && (
-        <div className="p-4 bg-[#39414B] border border-[#E75835] rounded-[10.88px] flex items-center gap-3 text-[#F9FAFF] text-[12px]">
-          <AlertCircle className="w-5 h-5 shrink-0 text-[#EA8C34]" />
-          <span>{error}</span>
+        <div className="p-4 bg-[#39414B] border border-[#E75835] rounded-[10.88px] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[#F9FAFF] text-[12px]">
+          <div className="flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 shrink-0 text-[#EA8C34]" />
+            <span>{error}</span>
+          </div>
+          <button
+            onClick={() => loadData(currentLocation)}
+            className="aqi-btn-outline self-start sm:self-auto py-1 px-3 text-[11px]"
+          >
+            Retry Connection
+          </button>
         </div>
       )}
 
       {/* Loading Skeleton */}
       {loading && !airData && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="h-64 bg-[#39414B] border border-[#677580] rounded-[12px] animate-pulse p-6"></div>
-          <div className="h-64 bg-[#39414B] border border-[#677580] rounded-[12px] animate-pulse p-6"></div>
-          <div className="h-64 bg-[#39414B] border border-[#677580] rounded-[12px] animate-pulse p-6"></div>
+        <div className="space-y-6">
+          <div className="bg-[#39414B] border border-[#677580] rounded-[12px] p-8 flex flex-col items-center justify-center text-center space-y-4">
+            <div className="w-16 h-16 rounded-[14px] bg-[#F9FAFF] p-2 flex items-center justify-center border border-[#97A7B6] shadow-md animate-pulse">
+              <Image
+                src="/airwise-logo-icon.png"
+                alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+                width={56}
+                height={56}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div>
+              <p className="font-bold text-[15px] text-[#F9FAFF]">
+                AIRWISE <span className="text-[#4BA9FF]">AI</span>
+              </p>
+              <p className="text-[12px] text-[#CCD3D7] mt-1">
+                Retrieving live atmospheric monitoring & CPCB indices for {currentLocation.name}...
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="h-64 bg-[#39414B] border border-[#677580] rounded-[12px] animate-pulse p-6"></div>
+            <div className="h-64 bg-[#39414B] border border-[#677580] rounded-[12px] animate-pulse p-6"></div>
+            <div className="h-64 bg-[#39414B] border border-[#677580] rounded-[12px] animate-pulse p-6"></div>
+          </div>
         </div>
       )}
 

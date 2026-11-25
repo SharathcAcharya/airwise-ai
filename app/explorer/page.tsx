@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { 
   MapPin, 
   Info, 
@@ -9,38 +10,61 @@ import {
   ShieldCheck,
   Compass
 } from 'lucide-react';
-import { POPULAR_LOCATIONS } from '@/lib/air-quality-service';
+import { POPULAR_LOCATIONS, LocationInfo } from '@/lib/air-quality-service';
+import LocationSearch from '@/components/LocationSearch';
+import { useLocation } from '@/context/LocationContext';
 
 export default function ExposureExplorerPage() {
-  const [selectedStation, setSelectedStation] = useState(POPULAR_LOCATIONS[0]);
+  const { currentLocation, setLocation } = useLocation();
+  const [selectedStation, setSelectedStation] = useState<LocationInfo>(currentLocation);
 
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580]">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
-              <Compass className="w-3.5 h-3.5 text-[#4BA9FF]" />
-              Regional Environmental Explorer
-            </span>
-            <span className="text-[10px] text-[#97A7B6]">•</span>
-            <span className="text-[10px] text-[#D0D2D7] font-semibold">Urban Monitoring Stations</span>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-[#39414B] p-5 rounded-[12px] border border-[#677580] shadow-sm">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-[12px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-xs shrink-0">
+            <Image
+              src="/airwise-logo-icon.png"
+              alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+              width={42}
+              height={42}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
-          <h2 className="text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[32.4px]">
-            Exposure & Monitoring Grid
-          </h2>
-          <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
-            Compare continuous monitoring locations across India and citizen pollution observations.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-2.5 py-0.5 rounded-[6.4px]">
+                <Compass className="w-3.5 h-3.5 text-[#4BA9FF]" />
+                Regional Environmental Explorer
+              </span>
+              <span className="text-[10px] text-[#97A7B6]">•</span>
+              <span className="text-[10px] text-[#D0D2D7] font-semibold">Urban Monitoring Stations</span>
+            </div>
+            <h2 className="text-[22px] sm:text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[28px] sm:leading-[32.4px]">
+              Exposure & Monitoring Grid
+            </h2>
+            <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
+              Compare continuous monitoring locations across India and citizen pollution observations.
+            </p>
+          </div>
         </div>
 
-        {/* Resolution Disclosure */}
-        <div className="flex items-center gap-2 px-3.5 py-2.5 bg-[#23272B] border border-[#677580] rounded-[6.8px] text-[10px] text-[#D0D2D7] max-w-md">
-          <Info className="w-4 h-4 text-[#4BA9FF] shrink-0" />
-          <span className="leading-[13.6px]">
-            <strong>Resolution Notice:</strong> CAMS global atmospheric chemistry models operate at ~40 km grid resolution (0.4° × 0.4°). Street-level micro-meteorology is indicative.
-          </span>
+        {/* Dynamic Location Search & Resolution Disclosure */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <LocationSearch
+            onLocationSelect={(loc) => {
+              setSelectedStation(loc);
+            }}
+          />
+
+          <div className="flex items-center gap-2 px-3 py-2 bg-[#23272B] border border-[#677580] rounded-[6.8px] text-[10px] text-[#D0D2D7] max-w-xs">
+            <Info className="w-3.5 h-3.5 text-[#4BA9FF] shrink-0" />
+            <span className="leading-[13px]">
+              <strong>Notice:</strong> CAMS model is ~40 km resolution (0.4° × 0.4°).
+            </span>
+          </div>
         </div>
       </div>
 

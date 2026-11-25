@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Sparkles, 
   Clock, 
@@ -11,14 +12,17 @@ import {
   Sliders, 
   Sun,
   Activity,
-  Train
+  Train,
+  RefreshCw
 } from 'lucide-react';
-import { POPULAR_LOCATIONS, AirQualityResponse } from '@/lib/air-quality-service';
+import { AirQualityResponse } from '@/lib/air-quality-service';
 import { DEFAULT_PREFERENCES, UserPreferences } from '@/lib/store';
 import { generateMyDayPlan, DailyPersonalizedPlan } from '@/lib/my-day-planner';
+import LocationSearch from '@/components/LocationSearch';
+import { useLocation } from '@/context/LocationContext';
 
 export default function MyDayPage() {
-  const [selectedLoc, setSelectedLoc] = useState('delhi-anand-vihar');
+  const { currentLocation } = useLocation();
   const [airData, setAirData] = useState<AirQualityResponse | null>(null);
   const [preferences, setPreferences] = useState<UserPreferences>(DEFAULT_PREFERENCES);
   const [plan, setPlan] = useState<DailyPersonalizedPlan | null>(null);
@@ -36,12 +40,13 @@ export default function MyDayPage() {
     }
   }, []);
 
-  // Fetch air quality
+  // Fetch air quality for dynamic location
   useEffect(() => {
     async function loadData() {
       setLoading(true);
       try {
-        const res = await fetch(`/api/air-quality?locId=${selectedLoc}`);
+        const query = `lat=${currentLocation.latitude}&lon=${currentLocation.longitude}&name=${encodeURIComponent(currentLocation.name)}`;
+        const res = await fetch(`/api/air-quality?${query}`);
         const json = await res.json();
         if (json.success && json.data) {
           setAirData(json.data);
@@ -55,66 +60,96 @@ export default function MyDayPage() {
       }
     }
     loadData();
-  }, [selectedLoc, preferences]);
+  }, [currentLocation, preferences]);
 
   return (
     <div className="space-y-6">
       {/* Signature Feature Hero */}
-      <div className="bg-[#39414B] border border-[#677580] text-[#F9FAFF] p-6 sm:p-8 rounded-[12px] relative overflow-hidden">
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#F9FAFF] bg-[#296AE1] px-3 py-1 rounded-[6.4px] mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-[#4BA9FF]" />
-            Signature Intelligent Planner
-          </div>
-          <h2 className="text-[28px] font-extrabold tracking-tight leading-[32.4px]">
-            My Day, Air-Smart™
-          </h2>
-          <p className="text-[12px] text-[#D0D2D7] mt-2 leading-[17.28px]">
-            Align your personal daily schedule with atmospheric chemistry. We analyze hourly forecasts to identify your lowest pollution windows for exercise, commute, and home ventilation.
-          </p>
+      <div className="bg-[#39414B] border border-[#677580] text-[#F9FAFF] p-6 sm:p-8 rounded-[12px] relative overflow-hidden shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="relative z-10 max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#F9FAFF] bg-[#296AE1] px-3 py-1 rounded-[6.4px] mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-[#4BA9FF]" />
+              Signature Intelligent Planner
+            </div>
+            <h2 className="text-[26px] sm:text-[28px] font-extrabold tracking-tight leading-[32.4px]">
+              My Day, Air-Smart™
+            </h2>
+            <p className="text-[12px] text-[#D0D2D7] mt-2 leading-[17.28px]">
+              Align your personal daily schedule with atmospheric chemistry. We analyze hourly forecasts to identify your lowest pollution windows for exercise, commute, and home ventilation.
+            </p>
 
-          <div className="mt-5 flex flex-wrap items-center gap-4 text-[10px] font-semibold">
-            <div className="flex items-center gap-2 bg-[#23272B] border border-[#677580] px-3.5 py-1.5 rounded-[6.8px]">
-              <Clock className="w-3.5 h-3.5 text-[#4BA9FF]" />
-              <span>Exercise: {preferences.exerciseSchedule.time} ({preferences.exerciseSchedule.type.replace('-', ' ')})</span>
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-[10px] font-semibold">
+              <div className="flex items-center gap-2 bg-[#23272B] border border-[#677580] px-3.5 py-1.5 rounded-[6.8px]">
+                <Clock className="w-3.5 h-3.5 text-[#4BA9FF]" />
+                <span>Exercise: {preferences.exerciseSchedule.time} ({preferences.exerciseSchedule.type.replace('-', ' ')})</span>
+              </div>
+              <div className="flex items-center gap-2 bg-[#23272B] border border-[#677580] px-3.5 py-1.5 rounded-[6.8px]">
+                <Train className="w-3.5 h-3.5 text-[#4BA9FF]" />
+                <span>Commute: {preferences.workSchedule.start} ({preferences.commuteMode})</span>
+              </div>
+              <Link
+                href="/preferences"
+                className="inline-flex items-center gap-1 text-[#4BA9FF] hover:underline"
+              >
+                <Sliders className="w-3.5 h-3.5" />
+                <span>Edit Profile</span>
+              </Link>
             </div>
-            <div className="flex items-center gap-2 bg-[#23272B] border border-[#677580] px-3.5 py-1.5 rounded-[6.8px]">
-              <Train className="w-3.5 h-3.5 text-[#4BA9FF]" />
-              <span>Commute: {preferences.workSchedule.start} ({preferences.commuteMode})</span>
+          </div>
+
+          {/* Right Brand Badge */}
+          <div className="hidden lg:flex flex-col items-center justify-center p-4 bg-[#23272B] border border-[#677580] rounded-[16px] shrink-0 text-center min-w-[160px] shadow-xs">
+            <div className="w-16 h-16 rounded-[12px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-xs mb-2">
+              <Image
+                src="/airwise-logo-icon.png"
+                alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+                width={56}
+                height={56}
+                className="w-full h-full object-contain"
+                priority
+              />
             </div>
-            <Link
-              href="/preferences"
-              className="inline-flex items-center gap-1 text-[#4BA9FF] hover:underline"
-            >
-              <Sliders className="w-3.5 h-3.5" />
-              <span>Edit My Profile</span>
-            </Link>
+            <span className="font-extrabold text-[12px] text-[#F9FAFF] tracking-tight">
+              AIRWISE <span className="text-[#4BA9FF]">AI</span>
+            </span>
+            <span className="text-[9px] text-[#A3A3C8] font-medium">
+              Air-Smart™ Optimization
+            </span>
           </div>
         </div>
       </div>
 
       {/* Control & Location Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#39414B] p-4 rounded-[12px] border border-[#677580]">
-        <div className="flex items-center gap-2 text-[12px] font-bold text-[#F9FAFF]">
-          <MapPin className="w-4 h-4 text-[#4BA9FF]" />
-          <span>Active Location:</span>
-          <select
-            value={selectedLoc}
-            onChange={(e) => setSelectedLoc(e.target.value)}
-            className="bg-[#23272B] border border-[#677580] text-[#F9FAFF] text-[12px] font-semibold rounded-[6.8px] px-3 py-1.5 focus:border-[#4BA9FF] cursor-pointer"
-          >
-            {POPULAR_LOCATIONS.map((loc) => (
-              <option key={loc.id} value={loc.id}>
-                {loc.name}
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="text-[12px] font-bold text-[#F9FAFF]">Planning For:</span>
+          <LocationSearch />
         </div>
 
         <div className="text-[10px] text-[#D0D2D7]">
-          Updated: <strong className="text-[#F9FAFF]">{airData ? new Date(airData.lastUpdated).toLocaleTimeString() : '...'}</strong>
+          Data Freshness: <strong className="text-[#F9FAFF]">{airData ? new Date(airData.lastUpdated).toLocaleTimeString() : '...'}</strong>
         </div>
       </div>
+
+      {/* Loading State */}
+      {loading && !plan && (
+        <div className="bg-[#39414B] border border-[#677580] rounded-[12px] p-8 flex flex-col items-center justify-center text-center space-y-3">
+          <div className="w-14 h-14 rounded-[12px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-md animate-pulse">
+            <Image
+              src="/airwise-logo-icon.png"
+              alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+              width={48}
+              height={48}
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="flex items-center gap-2 text-[12px] text-[#D0D2D7]">
+            <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#4BA9FF]" />
+            <span>Calculating optimal diurnal exposure windows for {currentLocation.name}...</span>
+          </div>
+        </div>
+      )}
 
       {/* Recommended Day Windows Grid */}
       {plan && (

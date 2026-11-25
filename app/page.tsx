@@ -3,32 +3,34 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
-  Wind, 
-  MapPin, 
-  AlertCircle, 
-  ArrowUpRight, 
-  Sparkles, 
-  RefreshCw, 
+import {
+  Wind,
+  MapPin,
+  AlertCircle,
+  ArrowUpRight,
+  Sparkles,
+  RefreshCw,
   Activity,
   Calendar,
   Compass,
   Info
 } from 'lucide-react';
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
   ResponsiveContainer
 } from 'recharts';
 import { POPULAR_LOCATIONS, AirQualityResponse, LocationInfo } from '@/lib/air-quality-service';
 import LocationSearch from '@/components/LocationSearch';
 import { useLocation } from '@/context/LocationContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function DashboardPage() {
-  const { currentLocation, setLocation } = useLocation();
+  const { currentLocation, setLocation, savedLocations, setCachedTelemetryTime } = useLocation();
+  const { t } = useLanguage();
   const [airData, setAirData] = useState<AirQualityResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,6 +46,7 @@ export default function DashboardPage() {
       const json = await res.json();
       if (json.success && json.data) {
         setAirData(json.data);
+        setCachedTelemetryTime(new Date().toISOString());
       } else {
         throw new Error(json.error || 'Failed to fetch air quality data');
       }
@@ -114,6 +117,38 @@ export default function DashboardPage() {
           </button>
         </div>
       </div>
+
+      {/* Saved Places Quick Switcher Bar */}
+      {savedLocations.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2 bg-[#2B313A] p-2.5 rounded-[10px] border border-[#677580] text-xs">
+          <span className="text-[11px] font-bold text-[#A3A3C8] uppercase tracking-wider pl-1">
+            {t('dashboard.multiLocationTitle', 'Saved Places')}:
+          </span>
+          <div className="flex flex-wrap items-center gap-2">
+            {savedLocations.map((loc) => {
+              const isSelected = currentLocation.name === loc.location.name;
+              return (
+                <button
+                  key={loc.id}
+                  onClick={() => {
+                    setLocation(loc.location);
+                    loadData(loc.location);
+                  }}
+                  className={`px-3 py-1 rounded-[6px] text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#296AE1] text-[#F9FAFF] shadow-xs'
+                      : 'bg-[#23272B] text-[#D0D2D7] hover:text-[#F9FAFF] border border-[#677580]'
+                  }`}
+                >
+                  <MapPin className={`w-3 h-3 ${isSelected ? 'text-[#F9FAFF]' : 'text-[#4BA9FF]'}`} />
+                  <span>{loc.label}</span>
+                  <span className="text-[9.5px] opacity-75">({loc.location.name.split(',')[0]})</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Error Alert */}
       {error && (
@@ -244,7 +279,7 @@ export default function DashboardPage() {
                   My Day, Air-Smart™
                 </h3>
                 <p className="text-[12px] text-[#D0D2D7] mt-1 max-w-xl leading-[17.28px]">
-                  {aqiVal && aqiVal > 200 
+                  {aqiVal && aqiVal > 200
                     ? 'Smog elevation detected during early hours. Move your morning cardio workouts indoors and schedule errand runs between 2:00 PM and 4:30 PM.'
                     : 'Atmospheric ventilation is favorable. Safe for outdoor cardio and active commutes with lower particulate risk.'}
                 </p>
@@ -318,8 +353,8 @@ export default function DashboardPage() {
                   <div
                     key={item.key}
                     className={`bg-[#39414B] p-4 rounded-[12px] border transition-colors duration-150 ${
-                      isDominant 
-                        ? 'border-[#4BA9FF] shadow-xs' 
+                      isDominant
+                        ? 'border-[#4BA9FF] shadow-xs'
                         : 'border-[#677580] hover:border-[#97A7B6]'
                     }`}
                   >
@@ -392,13 +427,13 @@ export default function DashboardPage() {
                         <stop offset="95%" stopColor="#4BA9FF" stopOpacity={0.0} />
                       </linearGradient>
                     </defs>
-                    <XAxis 
-                      dataKey="displayTime" 
-                      tick={{ fontSize: 10, fill: '#D0D2D7' }} 
+                    <XAxis
+                      dataKey="displayTime"
+                      tick={{ fontSize: 10, fill: '#D0D2D7' }}
                       interval={3}
                     />
                     <YAxis tick={{ fontSize: 10, fill: '#D0D2D7' }} />
-                    <Tooltip 
+                    <Tooltip
                       content={({ active, payload, label }) => {
                         if (active && payload && payload.length) {
                           return (
@@ -416,19 +451,19 @@ export default function DashboardPage() {
                         return null;
                       }}
                     />
-                    <Area 
-                      type="monotone" 
-                      dataKey="aqi" 
-                      stroke="#4BA9FF" 
-                      strokeWidth={2} 
-                      fill="url(#aqiGrad)" 
+                    <Area
+                      type="monotone"
+                      dataKey="aqi"
+                      stroke="#4BA9FF"
+                      strokeWidth={2}
+                      fill="url(#aqiGrad)"
                     />
-                    <Area 
-                      type="monotone" 
-                      dataKey="pm25" 
-                      stroke="#97A7B6" 
-                      strokeWidth={1.5} 
-                      fill="none" 
+                    <Area
+                      type="monotone"
+                      dataKey="pm25"
+                      stroke="#97A7B6"
+                      strokeWidth={1.5}
+                      fill="none"
                     />
                   </AreaChart>
                 </ResponsiveContainer>

@@ -11,6 +11,16 @@ const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
+
+  // Bounded memory management: clean expired records if cache grows
+  if (rateLimitMap.size > 500) {
+    for (const [key, val] of rateLimitMap.entries()) {
+      if (now > val.resetTime) {
+        rateLimitMap.delete(key);
+      }
+    }
+  }
+
   const entry = rateLimitMap.get(ip);
 
   if (!entry || now > entry.resetTime) {
@@ -37,7 +47,8 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { messages, environmentalContext, userProfile } = body;
+    const { messages, environmentalContext, userProfile, language } = body;
+    const userLanguage = typeof language === 'string' ? language.toLowerCase() : 'en';
 
     // Strict input validation
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
@@ -86,6 +97,10 @@ USER PREFERENCES & SENSITIVITY PROFILE:
 - Morning Exercise: ${userProfile?.morningExercise || 'Outdoor jogger'}
 - Commute Mode: ${userProfile?.commuteMode || 'Metro / Public transit'}
 
+LANGUAGE INSTRUCTION:
+The user selected language code is "${userLanguage}" (e.g. 'kn' for Kannada, 'hi' for Hindi, 'ta' for Tamil, 'bn' for Bengali, 'mr' for Marathi, 'en' for English).
+If the user writes or requests answers in a regional Indian language, or if "${userLanguage}" is not 'en', generate your response fluently and naturally in that language's authentic script (ಕನ್ನಡ, हिन्दी, தமிழ், বাংলা, मराठी), while preserving factual numbers, units (µg/m³, mg/m³), and CPCB categories.
+
 CRITICAL GUIDELINES:
 1. Ground your answers strictly in the verified readings provided above. Do NOT invent alternate or conflicting pollution numbers.
 2. Provide practical, empathetic, actionable advice (e.g. ideal exercise windows, mask recommendations like N95 for Poor/Very Poor, indoor ventilation, air purifier HEPA guidance, eco-friendly transit).
@@ -99,7 +114,8 @@ CRITICAL GUIDELINES:
       const ruleBasedReply = generateRuleBasedResponse(
         latestUserMessage,
         environmentalContext,
-        userProfile
+        userProfile,
+        userLanguage
       );
       return NextResponse.json({
         reply: ruleBasedReply,
@@ -137,7 +153,8 @@ CRITICAL GUIDELINES:
       const fallbackReply = generateRuleBasedResponse(
         latestUserMessage,
         environmentalContext,
-        userProfile
+        userProfile,
+        userLanguage
       );
       return NextResponse.json({
         reply: fallbackReply,

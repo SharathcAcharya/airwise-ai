@@ -1,15 +1,15 @@
 /**
  * AIRWISE AI - Indian National AQI (CPCB) Calculation Engine
- * 
+ *
  * Based on official Central Pollution Control Board (CPCB) guidelines.
- * 
+ *
  * Sub-index formula:
  *   I_p = [ (I_Hi - I_Lo) / (B_Hi - B_Lo) ] * (C_p - B_Lo) + I_Lo
- * 
+ *
  * CPCB AVERAGING PERIODS:
  * - PM2.5, PM10, NO2, SO2, NH3: 24-hour running or daily average
  * - CO, O3: 8-hour running average
- * 
+ *
  * CPCB DATA COMPLETENESS RULES:
  * - A 24-hour average requires at least 16 hourly readings (>= 66.7% data capture).
  * - An 8-hour average for CO and O3 requires at least 6 hourly readings (>= 75% data capture).
@@ -21,12 +21,12 @@
 
 export type PollutantKey = 'pm25' | 'pm10' | 'no2' | 'so2' | 'co' | 'o3' | 'nh3';
 
-export type AQICategory = 
-  | 'Good' 
-  | 'Satisfactory' 
-  | 'Moderate' 
-  | 'Poor' 
-  | 'Very Poor' 
+export type AQICategory =
+  | 'Good'
+  | 'Satisfactory'
+  | 'Moderate'
+  | 'Poor'
+  | 'Very Poor'
   | 'Severe'
   | 'Unknown';
 
@@ -310,7 +310,7 @@ export function calculateAveragedPollutant(
  */
 export function calculateSubIndex(pollutant: PollutantKey, rawVal: number | null | undefined): SubIndexResult {
   const defaultUnit = pollutant === 'co' ? 'mg/m³' : 'µg/m³';
-  
+
   if (rawVal === null || rawVal === undefined || isNaN(rawVal) || rawVal < 0) {
     return {
       pollutant,
@@ -419,7 +419,7 @@ export function calculateIndianAQI(input: RawPollutantInput): CompositeAQIResult
     .map(key => subIndices[key])
     .filter(item => item.isValid && item.subIndex !== null);
 
-  const hasParticulateMatter = 
+  const hasParticulateMatter =
     (subIndices.pm25.isValid && subIndices.pm25.subIndex !== null) ||
     (subIndices.pm10.isValid && subIndices.pm10.subIndex !== null);
 

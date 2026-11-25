@@ -1,10 +1,10 @@
 # AIRWISE AI — Design System Specification
 ## Reference: AQI.IN (India) Design System
 
-> **Tagline:** Breathe Smarter. Move Safer. Live Greener.  
-> **Source of Truth Reference:** AQI.IN (IN) (`https://www.aqi.in/in`)  
-> **Conformance Level:** WCAG 2.2 Level AA  
-> **Architecture:** Next.js 16 (App Router), Tailwind CSS v4, PostCSS  
+> **Tagline:** Breathe Smarter. Move Safer. Live Greener.
+> **Source of Truth Reference:** AQI.IN (IN) (`https://www.aqi.in/in`)
+> **Conformance Level:** WCAG 2.2 Level AA
+> **Architecture:** Next.js 16 (App Router), Tailwind CSS v4, PostCSS
 
 ---
 
@@ -133,27 +133,27 @@ Strict, standardized border radii tokens:
 ## 3. Component Anatomy & Classes
 
 ### 3.1 Buttons
-- **Primary Action (`.aqi-btn-primary`):**  
-  Background: `#296AE1`; Foreground: `#F9FAFF`; Border-radius: `6.8px`; Transition: `150ms`.  
+- **Primary Action (`.aqi-btn-primary`):**
+  Background: `#296AE1`; Foreground: `#F9FAFF`; Border-radius: `6.8px`; Transition: `150ms`.
   Hover: `#4BA9FF`. Focus-visible: Ring 2px `#4BA9FF` with 2px offset.
-- **Secondary Action (`.aqi-btn-secondary`):**  
-  Background: `#555555`; Foreground: `#F9FAFF`; Border-radius: `6.8px`.  
+- **Secondary Action (`.aqi-btn-secondary`):**
+  Background: `#555555`; Foreground: `#F9FAFF`; Border-radius: `6.8px`.
   Hover: `#677580`.
-- **Outline Button (`.aqi-btn-outline`):**  
-  Background: Transparent; Border: 1px solid `#677580`; Foreground: `#F9FAFF`.  
+- **Outline Button (`.aqi-btn-outline`):**
+  Background: Transparent; Border: 1px solid `#677580`; Foreground: `#F9FAFF`.
   Hover: Background `#39414B`, Border `#97A7B6`.
-- **Destructive Action (`.aqi-btn-danger`):**  
-  Background: `#E5484D`; Foreground: `#F9FAFF`.  
+- **Destructive Action (`.aqi-btn-danger`):**
+  Background: `#E5484D`; Foreground: `#F9FAFF`.
   Hover: `#E75835`.
 
 ### 3.2 Cards & Surfaces
-- **Primary Card Surface (`.aqi-card-surface`):**  
+- **Primary Card Surface (`.aqi-card-surface`):**
   Background: `#39414B`; Border: 1px solid `#677580`; Border-radius: `16px`; Padding: `24px` (`p-6`).
-- **Dark Surface (`.aqi-card-dark`):**  
+- **Dark Surface (`.aqi-card-dark`):**
   Background: `#23272B`; Border: 1px solid `#39414B`; Border-radius: `12px`.
 
 ### 3.3 Form Inputs (`.aqi-input`)
-- Background: `#23272B`; Border: 1px solid `#677580`; Text: `#F9FAFF`; Radius: `6.4px`.  
+- Background: `#23272B`; Border: 1px solid `#677580`; Text: `#F9FAFF`; Radius: `6.4px`.
 - Focus: Border `#4BA9FF`, Ring 1px `#4BA9FF`. Placeholder: `#97A7B6`.
 
 ### 3.4 Status Badges (`.aqi-badge`)

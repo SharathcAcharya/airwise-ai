@@ -1,0 +1,214 @@
+{
+  "brand": {
+    "tagline": "Breathe Smarter. Move Safer. Live Greener.",
+    "sub": "Eco-Tech Intelligence",
+    "cpcbMethodology": "CPCB Methodology",
+    "cpcbProtocol": "Indian National Air Quality Index calculation protocols.",
+    "cpcbStandard": "CPCB Indian Standard",
+    "camsModel": "CAMS Global Model (~40 km)",
+    "gemini": "Google Gemini 1.5",
+    "rights": "All rights reserved."
+  },
+  "nav": {
+    "groups": {
+      "overview": "Overview",
+      "intelligence": "Intelligence",
+      "community": "Community",
+      "personal": "Personal"
+    },
+    "dashboard": "Dashboard",
+    "myDay": "My Day (Air-Smart)",
+    "assistant": "AI Assistant",
+    "explorer": "Exposure Explorer",
+    "commute": "Commute Planner",
+    "insights": "My Insights",
+    "communityWatch": "Community Watch",
+    "hotspotMap": "Hotspot Map",
+    "sustainability": "Sustainability Tracker",
+    "challenges": "Green Challenges",
+    "notifications": "Alerts & Notifications",
+    "preferences": "Preferences"
+  },
+  "aqi": {
+    "categories": {
+      "Good": "Good",
+      "Satisfactory": "Satisfactory",
+      "Moderate": "Moderate",
+      "Poor": "Poor",
+      "Very Poor": "Very Poor",
+      "Severe": "Severe",
+      "Unknown": "Unknown"
+    },
+    "prompts": {
+      "Good": "Minimal impact. Safe for all outdoor activities and exercise.",
+      "Satisfactory": "Minor breathing discomfort to sensitive people.",
+      "Moderate": "Breathing discomfort to people with lung disease, children, and older adults.",
+      "Poor": "Breathing discomfort to most people on prolonged exposure.",
+      "Very Poor": "Respiratory illness on prolonged exposure. Significant outdoor risks.",
+      "Severe": "Affects healthy people and seriously impacts those with existing diseases."
+    },
+    "dominant": "Dominant Pollutant",
+    "subIndex": "Sub-Index",
+    "indicativeNote": "Indicative CAMS satellite/chemical reanalysis estimate (~40 km grid). Not a physical ground monitoring station.",
+    "officialNote": "Calculated with official Central Pollution Control Board (CPCB) linear interpolation."
+  },
+  "common": {
+    "searchLocation": "Search city, town, locality...",
+    "currentLocation": "Current Location",
+    "detectingGPS": "Acquiring GPS...",
+    "useGps": "Detect Current GPS",
+    "offlineMode": "Offline Mode — Cached data from",
+    "save": "Save Changes",
+    "saved": "Saved successfully",
+    "reset": "Reset to Defaults",
+    "loading": "Loading environmental telemetry...",
+    "error": "Error loading data",
+    "retry": "Retry",
+    "viewMore": "View Details",
+    "close": "Close",
+    "language": "Language",
+    "actions": "Actions",
+    "today": "Today",
+    "weekly": "7-Day Overview",
+    "printReport": "Print / Export Report"
+  },
+  "dashboard": {
+    "title": "Urban Air Quality & Real-Time Environmental Health",
+    "subtitle": "Continuous ambient monitoring with Indian National CPCB standard calculation.",
+    "liveAqi": "Live Indian AQI",
+    "hourlyForecast": "24-Hour Forecast & Trend",
+    "pollutantBreakdown": "Pollutant Concentration Breakdown",
+    "multiLocationTitle": "Saved Family & Commute Places",
+    "quickSwitch": "Quick Switch",
+    "addLocation": "Add Location",
+    "home": "Home",
+    "work": "Work",
+    "school": "School"
+  },
+  "myDay": {
+    "title": "My Day, Air-Smart™ Schedule Planner",
+    "subtitle": "Personalized daily schedule optimization minimizing high-particulate exposure.",
+    "optimalWindow": "Optimal Outdoor Window",
+    "highRiskWindow": "High Pollution Window",
+    "morningRoutine": "Morning Exercise Window",
+    "workCommute": "Office Commute Plan",
+    "eveningRoutine": "Evening Outdoor Activity",
+    "exposureScore": "Predicted Exposure Level",
+    "hourlyGuide": "Hourly Activity Recommendations"
+  },
+  "commute": {
+    "title": "Smart Clean-Air Commute Planner",
+    "subtitle": "Compare route exposures, choose cleaner travel times, and earn green community eco-points.",
+    "origin": "Origin (Starting Point)",
+    "destination": "Destination (Arrival Point)",
+    "departureTime": "Departure Time",
+    "calculateRoutes": "Analyze Route Exposures",
+    "cleanestMode": "Cleanest Option",
+    "fastestMode": "Fastest Option",
+    "modes": {
+      "walk": "Walking",
+      "cycle": "Bicycle",
+      "metro": "Metro / Electric Rail",
+      "bus": "City Bus",
+      "carpool": "Carpool / Rideshare",
+      "personal": "Personal Car / Bike"
+    },
+    "exposureRating": "Particulate Inhalation Risk",
+    "co2Savings": "Estimated CO2 Prevented",
+    "logAction": "Log to Sustainability Tracker",
+    "loggedSuccess": "Commute logged! Eco-points awarded.",
+    "camsNotice": "Travel exposure indicators utilize active CAMS 0.4° atmospheric forecasts across urban route corridors."
+  },
+  "insights": {
+    "title": "Personal Air-Quality Exposure Reports",
+    "subtitle": "Comprehensive analytical summaries of your environmental exposure patterns.",
+    "dailyAverage": "Daily Mean AQI",
+    "lowestExposure": "Cleanest Period",
+    "peakExposure": "Peak Pollution Spike",
+    "hoursInUnhealthy": "Hours in Unhealthy Air",
+    "pollutantShare": "Dominant Exposure Drivers",
+    "weeklySummary": "7-Day Historical Trend",
+    "healthGuidance": "Personalized Health Assessment"
+  },
+  "community": {
+    "title": "Community Pollution Hotspot Map & Citizen Watch",
+    "subtitle": "Hyperlocal crowd-sourced pollution alerts and civic air quality reporting across India.",
+    "reportIssue": "Report Pollution Hotspot",
+    "allCategories": "All Categories",
+    "mapView": "Interactive Hotspot Map",
+    "listView": "List View",
+    "status": {
+      "unverified": "Citizen Report (Unverified)",
+      "under_review": "Under Civic Review",
+      "verified": "Community Verified",
+      "resolved": "Civic Action Resolved"
+    },
+    "categories": {
+      "garbage_burning": "Waste / Plastic Burning",
+      "construction_dust": "Demolition / Construction Dust",
+      "road_dust": "Suspended Road Silt",
+      "industrial_plume": "Industrial Emissions",
+      "visible_smoke": "Dense Vehicular Smoke",
+      "other": "Other Air Hazard"
+    },
+    "upvote": "Support / Upvote",
+    "disclaimer": "Citizen reports represent crowd-sourced ground observations. They complement satellite model forecasts and CAAQMS stations."
+  },
+  "sustainability": {
+    "title": "Urban Sustainability & Eco-Habits Tracker",
+    "subtitle": "Track your carbon offsets, earn eco-points, and participate in community clean-air challenges.",
+    "totalCo2Saved": "Total CO2 Offset",
+    "ecoPointsEarned": "Eco Points Earned",
+    "greenTripsLogged": "Sustainable Trips",
+    "activeStreak": "Active Day Streak",
+    "logNewAction": "Record Green Action",
+    "challengesTitle": "Active Green Community Challenges",
+    "joinChallenge": "Join Challenge",
+    "challengeCompleted": "Goal Completed!"
+  },
+  "assistant": {
+    "title": "Regional AI Environmental Assistant",
+    "subtitle": "Grounded environmental intelligence powered by Google Gemini 1.5 and CPCB protocols.",
+    "placeholder": "Ask in your preferred language (e.g. running safety, masks, causes)...",
+    "listening": "Listening... Speak now",
+    "voiceInput": "Voice Input",
+    "readAloud": "Read Response Aloud",
+    "stopSpeaking": "Stop Reading",
+    "quickPrompts": "Recommended Inquiries",
+    "ruleEngine": "Rule-Based Offline Environmental Engine"
+  },
+  "notifications": {
+    "title": "Intelligent AQI Alerts & Notifications",
+    "subtitle": "Real-time automated alerts when particulate concentrations cross your safety threshold.",
+    "enableBrowser": "Enable Push Notifications",
+    "browserGranted": "Browser notifications active",
+    "thresholdLabel": "Alert Threshold (Indian AQI)",
+    "quietHours": "Quiet Hours (Do Not Disturb)",
+    "alertHistory": "Recent Environmental Alerts",
+    "noAlerts": "No alerts triggered in the last 24 hours. Air quality within safe parameters."
+  },
+  "preferences": {
+    "title": "Personalization & Health Profile",
+    "subtitle": "Configure your daily schedule, health sensitivity, language, and primary locations.",
+    "languageSelection": "Preferred Display Language",
+    "sensitivityTitle": "Health Sensitivity Profile",
+    "locationsTitle": "Saved Locations (Family & Places)"
+  },
+  "explorer": {
+    "title": "Exposure & Monitoring Grid",
+    "subtitle": "Compare continuous monitoring locations across India and citizen pollution observations.",
+    "urbanStations": "Urban Monitoring Stations",
+    "stationDetails": "Station Details & Telemetry",
+    "camsNotice": "Regional atmospheric dispersion data sourced from CAMS ~40 km resolution models.",
+    "selectStation": "Select a station or city to inspect readings."
+  },
+  "commuteErrors": {
+    "sameOrigin": "Origin and destination cannot be identical for travel route analysis.",
+    "enterLocations": "Please enter both origin and destination to analyze routes.",
+    "calculating": "Analyzing route and atmospheric conditions..."
+  },
+  "communityErrors": {
+    "imageTooLarge": "Image file is too large. Maximum allowable size is 2 MB.",
+    "invalidImageType": "Invalid file format. Please upload a JPEG, PNG, or WebP image."
+  }
+}

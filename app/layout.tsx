@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import AppShell from "@/components/layout/AppShell";
 import { LocationProvider } from "@/context/LocationContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 export const viewport: Viewport = {
   themeColor: "#23272B",
@@ -81,11 +82,14 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
         <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="min-h-full flex flex-col bg-[#23272B] text-[#F9FAFF]">
-        <LocationProvider>
-          <AppShell>{children}</AppShell>
-        </LocationProvider>
+        <LanguageProvider>
+          <LocationProvider>
+            <AppShell>{children}</AppShell>
+          </LocationProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

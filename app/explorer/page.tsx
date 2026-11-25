@@ -2,20 +2,22 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { 
-  MapPin, 
-  Info, 
-  AlertCircle, 
-  Navigation, 
+import {
+  MapPin,
+  Info,
+  AlertCircle,
+  Navigation,
   ShieldCheck,
   Compass
 } from 'lucide-react';
 import { POPULAR_LOCATIONS, LocationInfo } from '@/lib/air-quality-service';
 import LocationSearch from '@/components/LocationSearch';
 import { useLocation } from '@/context/LocationContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function ExposureExplorerPage() {
   const { currentLocation, setLocation } = useLocation();
+  const { t } = useLanguage();
   const [selectedStation, setSelectedStation] = useState<LocationInfo>(currentLocation);
 
   return (
@@ -40,13 +42,13 @@ export default function ExposureExplorerPage() {
                 Regional Environmental Explorer
               </span>
               <span className="text-[10px] text-[#97A7B6]">•</span>
-              <span className="text-[10px] text-[#D0D2D7] font-semibold">Urban Monitoring Stations</span>
+              <span className="text-[10px] text-[#D0D2D7] font-semibold">{t('explorer.urbanStations', 'Urban Monitoring Stations')}</span>
             </div>
             <h2 className="text-[22px] sm:text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[28px] sm:leading-[32.4px]">
-              Exposure & Monitoring Grid
+              {t('explorer.title', 'Exposure & Monitoring Grid')}
             </h2>
             <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
-              Compare continuous monitoring locations across India and citizen pollution observations.
+              {t('explorer.subtitle', 'Compare continuous monitoring locations across India and citizen pollution observations.')}
             </p>
           </div>
         </div>

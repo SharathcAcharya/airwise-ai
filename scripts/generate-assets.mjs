@@ -4,7 +4,7 @@ import path from 'path';
 
 async function generateAssets() {
   const original = path.join(process.cwd(), 'public', 'Airwise AI Eco-Tech Logo.png');
-  
+
   if (!fs.existsSync(original)) {
     throw new Error('Original logo not found at ' + original);
   }
@@ -33,7 +33,7 @@ async function generateAssets() {
   const eHeight = Math.min(1024 - eTop, 474 + ePad * 2);
 
   console.log('Cropping emblem:', { eLeft, eTop, eWidth, eHeight });
-  
+
   const emblemBuffer = await sharp(original)
     .extract({ left: eLeft, top: eTop, width: eWidth, height: eHeight })
     .toBuffer();
@@ -111,7 +111,7 @@ async function generateAssets() {
   const cardLogoBuffer = await sharp(path.join(process.cwd(), 'public', 'airwise-logo-full.png'))
     .resize(800, null, { fit: 'contain' })
     .toBuffer();
-  
+
   await sharp(cardLogoBuffer).toFile(path.join(process.cwd(), 'public', 'airwise-logo-card.png'));
   console.log('Created public/airwise-logo-card.png');
 }

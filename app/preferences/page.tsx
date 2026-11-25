@@ -2,22 +2,31 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { 
-  Sliders, 
-  Save, 
-  CheckCircle2, 
-  HeartPulse, 
-  Clock, 
-  Train, 
+import {
+  Sliders,
+  Save,
+  CheckCircle2,
+  HeartPulse,
+  Clock,
+  Train,
   RotateCcw,
-  MapPin
+  MapPin,
+  Globe,
+  Trash2,
+  Plus,
+  Home,
+  Briefcase,
+  GraduationCap
 } from 'lucide-react';
 import { DEFAULT_PREFERENCES, UserPreferences } from '@/lib/store';
 import LocationSearch from '@/components/LocationSearch';
 import { useLocation } from '@/context/LocationContext';
+import { useLanguage, SupportedLanguage } from '@/context/LanguageContext';
 
 export default function PreferencesPage() {
-  const { currentLocation, setLocation } = useLocation();
+  const { currentLocation, savedLocations, removeSavedLocation, setLocation } = useLocation();
+  const { language, setLanguage, languages, currentLanguageMeta, t } = useLanguage();
+
   const [prefs, setPrefs] = useState<UserPreferences>(DEFAULT_PREFERENCES);
   const [savedNotice, setSavedNotice] = useState(false);
 
@@ -46,6 +55,7 @@ export default function PreferencesPage() {
   const handleReset = () => {
     setPrefs(DEFAULT_PREFERENCES);
     localStorage.removeItem('airwise_user_preferences');
+    setLanguage('en');
     setSavedNotice(true);
     setTimeout(() => setSavedNotice(false), 3000);
   };
@@ -58,7 +68,7 @@ export default function PreferencesPage() {
           <div className="w-12 h-12 rounded-[12px] bg-[#F9FAFF] p-1.5 flex items-center justify-center border border-[#97A7B6] shadow-xs shrink-0">
             <Image
               src="/airwise-logo-icon.png"
-              alt="AIRWISE AI — Breathe Smarter. Move Safer. Live Greener."
+              alt="AIRWISE AI"
               width={42}
               height={42}
               className="w-full h-full object-contain"
@@ -73,24 +83,72 @@ export default function PreferencesPage() {
               </span>
             </div>
             <h2 className="text-[22px] sm:text-[24px] font-bold text-[#F9FAFF] tracking-tight mt-1 leading-[28px] sm:leading-[32.4px]">
-              Personalization & Sensitivity Settings
+              {t('preferences.title', 'Personalization & Health Profile')}
             </h2>
             <p className="text-[12px] text-[#D0D2D7] mt-0.5 leading-[17.28px]">
-              Customize your schedule and health sensitivity profile to tailor My Day, Air-Smart™ plans.
+              {t('preferences.subtitle', 'Configure your daily schedule, health sensitivity, language, and primary locations.')}
             </p>
           </div>
         </div>
 
         {savedNotice && (
-          <div className="flex items-center gap-2 text-[10px] font-bold text-[#F9FAFF] bg-[#296AE1] px-3 py-2 rounded-[6.8px]">
-            <CheckCircle2 className="w-4 h-4 text-[#4BA9FF]" />
-            <span>Preferences Saved Successfully</span>
+          <div className="flex items-center gap-2 text-[10px] font-bold text-[#F9FAFF] bg-[#209040] px-3 py-2 rounded-[6.8px]">
+            <CheckCircle2 className="w-4 h-4 text-[#F9FAFF]" />
+            <span>{t('common.saved', 'Saved successfully')}</span>
           </div>
         )}
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
-        {/* Default Saved City / Area */}
+        {/* Multilingual Display Language Selection */}
+        <div className="bg-[#39414B] p-6 rounded-[12px] border border-[#677580] space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-[6.8px] bg-[#23272B] text-[#4BA9FF] flex items-center justify-center border border-[#677580]">
+              <Globe className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="font-bold text-[15px] text-[#F9FAFF] leading-[20px]">
+                {t('preferences.languageSelection', 'Preferred Display Language')}
+              </h3>
+              <p className="text-[10px] text-[#D0D2D7]">
+                Sets UI copy, health notifications, and AI Assistant default language
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+            {languages.map((l) => (
+              <label
+                key={l.code}
+                className={`p-3.5 rounded-[8px] border flex items-center justify-between cursor-pointer transition-colors ${
+                  language === l.code
+                    ? 'bg-[#296AE1] border-[#4BA9FF] text-[#F9FAFF]'
+                    : 'bg-[#23272B] border-[#677580] text-[#D0D2D7] hover:border-[#97A7B6]'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <input
+                    type="radio"
+                    name="preferredLanguage"
+                    value={l.code}
+                    checked={language === l.code}
+                    onChange={() => setLanguage(l.code)}
+                    className="text-[#4BA9FF]"
+                  />
+                  <div>
+                    <div className="font-bold text-[13px]">{l.nativeName}</div>
+                    <div className="text-[9.5px] opacity-80">{l.name}</div>
+                  </div>
+                </div>
+                <span className="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-[#23272B]/50 border border-white/10">
+                  {l.code}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Primary Monitored Location & Saved Family Places */}
         <div className="bg-[#39414B] p-6 rounded-[12px] border border-[#677580] space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-[6.8px] bg-[#23272B] text-[#4BA9FF] flex items-center justify-center border border-[#677580]">
@@ -101,13 +159,74 @@ export default function PreferencesPage() {
                 Primary Monitored Location
               </h3>
               <p className="text-[10px] text-[#D0D2D7]">
-                Your home base city or locality used across all dashboard and planner views
+                Your primary urban location for all dashboard feeds and exposure models
               </p>
             </div>
           </div>
 
           <div className="pt-2">
             <LocationSearch />
+          </div>
+
+          {/* Saved Family & Places Matrix */}
+          <div className="pt-4 border-t border-[#677580] space-y-3">
+            <h4 className="font-bold text-[13px] text-[#F9FAFF] flex items-center gap-2">
+              <span>{t('preferences.locationsTitle', 'Saved Locations (Family & Places)')}</span>
+              <span className="text-[10px] font-normal text-[#A3A3C8]">({savedLocations.length} saved)</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {savedLocations.map((loc) => {
+                const isSelected = currentLocation.name === loc.location.name;
+                return (
+                  <div
+                    key={loc.id}
+                    className={`p-3 rounded-[8px] border flex flex-col justify-between transition-colors ${
+                      isSelected
+                        ? 'bg-[#296AE1]/20 border-[#4BA9FF]'
+                        : 'bg-[#23272B] border-[#677580]'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between text-[11px] font-bold">
+                        <span className="flex items-center gap-1.5 text-[#4BA9FF]">
+                          {loc.label.toLowerCase().includes('home') && <Home className="w-3.5 h-3.5" />}
+                          {loc.label.toLowerCase().includes('work') && <Briefcase className="w-3.5 h-3.5" />}
+                          {loc.label.toLowerCase().includes('school') && <GraduationCap className="w-3.5 h-3.5" />}
+                          {loc.label}
+                        </span>
+                        {isSelected && (
+                          <span className="text-[9px] font-extrabold text-[#209040] bg-[#209040]/20 px-1.5 py-0.2 rounded">
+                            Active
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[11.5px] font-bold text-[#F9FAFF] mt-1 line-clamp-1">
+                        {loc.location.name}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-[#677580]/50 text-[10px]">
+                      <button
+                        type="button"
+                        onClick={() => setLocation(loc.location)}
+                        className="text-[#4BA9FF] hover:underline font-semibold"
+                      >
+                        Select as Active
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeSavedLocation(loc.id)}
+                        className="text-[#E5484D] hover:underline"
+                        title="Remove location"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -119,7 +238,7 @@ export default function PreferencesPage() {
             </div>
             <div>
               <h3 className="font-bold text-[15px] text-[#F9FAFF] leading-[20px]">
-                Health & Sensitivity Profile
+                {t('preferences.sensitivityTitle', 'Health Sensitivity Profile')}
               </h3>
               <p className="text-[10px] text-[#D0D2D7]">
                 Adjusts warning thresholds for respiratory and cardiovascular sensitivity
@@ -291,7 +410,7 @@ export default function PreferencesPage() {
             className="aqi-btn-secondary"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset Defaults</span>
+            <span>{t('common.reset', 'Reset to Defaults')}</span>
           </button>
 
           <button
@@ -299,7 +418,7 @@ export default function PreferencesPage() {
             className="aqi-btn-primary"
           >
             <Save className="w-4 h-4" />
-            <span>Save Preferences</span>
+            <span>{t('common.save', 'Save Changes')}</span>
           </button>
         </div>
       </form>

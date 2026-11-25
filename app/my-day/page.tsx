@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
-  Sparkles, 
-  Clock, 
-  MapPin, 
-  AlertTriangle, 
-  CheckCircle, 
-  Sliders, 
+import {
+  Sparkles,
+  Clock,
+  MapPin,
+  AlertTriangle,
+  CheckCircle,
+  Sliders,
   Sun,
   Activity,
   Train,
@@ -20,9 +20,11 @@ import { DEFAULT_PREFERENCES, UserPreferences } from '@/lib/store';
 import { generateMyDayPlan, DailyPersonalizedPlan } from '@/lib/my-day-planner';
 import LocationSearch from '@/components/LocationSearch';
 import { useLocation } from '@/context/LocationContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function MyDayPage() {
   const { currentLocation } = useLocation();
+  const { t } = useLanguage();
   const [airData, setAirData] = useState<AirQualityResponse | null>(null);
   const [preferences, setPreferences] = useState<UserPreferences>(DEFAULT_PREFERENCES);
   const [plan, setPlan] = useState<DailyPersonalizedPlan | null>(null);
@@ -73,10 +75,10 @@ export default function MyDayPage() {
               Signature Intelligent Planner
             </div>
             <h2 className="text-[26px] sm:text-[28px] font-extrabold tracking-tight leading-[32.4px]">
-              My Day, Air-Smart™
+              {t('myDay.title', 'My Day, Air-Smart™ Schedule Planner')}
             </h2>
             <p className="text-[12px] text-[#D0D2D7] mt-2 leading-[17.28px]">
-              Align your personal daily schedule with atmospheric chemistry. We analyze hourly forecasts to identify your lowest pollution windows for exercise, commute, and home ventilation.
+              {t('myDay.subtitle', 'Personalized daily schedule optimization minimizing high-particulate exposure.')}
             </p>
 
             <div className="mt-5 flex flex-wrap items-center gap-3 text-[10px] font-semibold">

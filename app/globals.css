@@ -7,13 +7,13 @@
     --bg-surface: #39414B;       /* --bg */
     --bg-subtle: #555555;        /* --bg-color */
     --bg-light: #F9FAFF;         /* --border-light / light card background */
-    
+
     /* Text Tokens */
     --text-primary: #F9FAFF;     /* Crisp high-contrast on dark surfaces */
     --text-secondary: #D0D2D7;   /* color-14: secondary descriptive text */
     --text-muted: #CCD3D7;       /* color-13: subdued caption text */
     --text-dark: #23272B;        /* color-1: dark text on light backgrounds */
-    
+
     /* Accent & Brand Tokens */
     --brand-primary: #4BA9FF;    /* --primary-color */
     --brand-accent: #296AE1;     /* --color */
@@ -22,22 +22,22 @@
     --brand-eco-emerald: #108040;/* Official logo dark emerald */
     --brand-eco-cyan: #00A3E0;   /* Official logo atmosphere cyan */
     --brand-eco-navy: #002850;   /* Official logo dark text navy */
-    
+
     /* Functional Severity Palette */
     --color-severity-red: #E5484D;    /* color-7 */
     --color-severity-vermilion: #E75835;/* color-8 */
     --color-severity-amber: #EA8C34;  /* color-9 */
-    
+
     /* Borders & Dividers */
     --border-dark: #677580;      /* --border */
     --border-mid: #97A7B6;       /* --border secondary */
     --border-purple: #A3A3C8;    /* color-12 */
     --border-light: #D8DAE6;     /* color-15 */
     --border-subtle: #E5E7EB;    /* color-16 */
-    
+
     /* Typography Font Stack */
     --font-primary: __primaryFont_096ea8, "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    
+
     /* Standard Shapes (Border Radii) */
     --radius-sm: 6.4px;
     --radius-md: 6.8px;

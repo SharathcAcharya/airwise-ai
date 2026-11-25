@@ -1,0 +1,33 @@
+{
+  "name": "AIRWISE AI — Breathe Smarter. Move Safer. Live Greener.",
+  "short_name": "AIRWISE AI",
+  "description": "Intelligent urban air quality, commute planning, and sustainability platform built with Indian CPCB AQI standards and Google Gemini intelligence.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#23272B",
+  "theme_color": "#23272B",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/airwise-logo-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/app/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

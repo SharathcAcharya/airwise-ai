@@ -1,17 +1,18 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Search, 
-  MapPin, 
-  Navigation, 
-  Loader2, 
-  X, 
-  AlertCircle, 
-  ChevronDown 
+import {
+  Search,
+  MapPin,
+  Navigation,
+  Loader2,
+  X,
+  AlertCircle,
+  ChevronDown
 } from 'lucide-react';
 import { LocationInfo, POPULAR_LOCATIONS } from '@/lib/air-quality-service';
 import { useLocation } from '@/context/LocationContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface LocationSearchProps {
   onLocationSelect?: (loc: LocationInfo) => void;
@@ -24,14 +25,15 @@ export default function LocationSearch({
   className = '',
   variant = 'compact',
 }: LocationSearchProps) {
-  const { 
-    currentLocation, 
-    setLocation, 
-    isLoadingGPS, 
-    gpsError, 
+  const {
+    currentLocation,
+    setLocation,
+    isLoadingGPS,
+    gpsError,
     requestCurrentPosition,
-    clearGpsError 
+    clearGpsError
   } = useLocation();
+  const { t } = useLanguage();
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -187,7 +189,7 @@ export default function LocationSearch({
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div 
+        <div
           className="absolute top-full left-0 sm:left-auto sm:right-0 mt-2 z-50 w-[calc(100vw-32px)] sm:w-[380px] max-w-[380px] bg-[#23272B] border border-[#677580] rounded-[10.88px] shadow-2xl p-3 flex flex-col gap-3"
           role="listbox"
         >
@@ -199,7 +201,7 @@ export default function LocationSearch({
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search Indian city or locality (e.g., Mangaluru, Udupi)..."
+              placeholder={t('common.searchLocation', 'Search city, town, locality...')}
               className="w-full pl-9 pr-8 py-2 bg-[#39414B] border border-[#677580] focus:border-[#4BA9FF] rounded-[6.4px] text-[14px] text-[#F9FAFF] placeholder-[#97A7B6] outline-none"
             />
             {searchTerm && (
@@ -227,7 +229,7 @@ export default function LocationSearch({
             className="flex items-center gap-2.5 px-3 py-2 bg-[#39414B] hover:bg-[#296AE1] text-[#4BA9FF] hover:text-[#F9FAFF] rounded-[6.8px] text-[13px] font-semibold transition-colors text-left"
           >
             <Navigation className="w-4 h-4 shrink-0" />
-            <span>Use My Exact GPS Location</span>
+            <span>{isLoadingGPS ? t('common.detectingGPS', 'Acquiring GPS...') : t('common.useGps', 'Use Current GPS Location')}</span>
           </button>
 
           {/* Dynamic Search Results */}
@@ -282,8 +284,8 @@ export default function LocationSearch({
                   type="button"
                   onClick={() => handleSelect(loc)}
                   className={`w-full flex items-center justify-between px-3 py-1.5 text-left rounded-[6.4px] transition-colors text-[13px] ${
-                    currentLocation.id === loc.id 
-                      ? 'bg-[#296AE1] text-[#F9FAFF] font-bold' 
+                    currentLocation.id === loc.id
+                      ? 'bg-[#296AE1] text-[#F9FAFF] font-bold'
                       : 'hover:bg-[#39414B] text-[#D0D2D7]'
                   }`}
                 >

@@ -37,6 +37,7 @@ export default function CommunityReportsPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeReport, setActiveReport] = useState<CommunityReport | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Form state
   const [showReportForm, setShowReportForm] = useState(false);
@@ -53,6 +54,7 @@ export default function CommunityReportsPage() {
   }, [currentLocation]);
 
   useEffect(() => {
+    setIsMounted(true);
     try {
       const stored = localStorage.getItem('airwise_community_reports');
       if (stored) {
@@ -491,7 +493,7 @@ export default function CommunityReportsPage() {
                 <div className="pt-2 flex flex-col gap-2 border-t border-[#677580]">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] text-[#97A7B6]">
-                      Reported {new Date(activeReport.reportedAt).toLocaleDateString()}
+                      Reported {isMounted && activeReport ? new Date(activeReport.reportedAt).toLocaleDateString() : '--/--/----'}
                     </span>
                     <button
                       onClick={() => handleUpvote(activeReport.id)}
@@ -590,7 +592,7 @@ export default function CommunityReportsPage() {
                 <div className="pt-3 border-t border-[#677580] flex items-center justify-between text-[11px] mt-4">
                   <span className="text-[10px] text-[#97A7B6] flex items-center gap-1">
                     <Clock className="w-3 h-3" />
-                    {new Date(rep.reportedAt).toLocaleDateString()}
+                    {isMounted ? new Date(rep.reportedAt).toLocaleDateString() : '--/--/----'}
                   </span>
                   <button
                     onClick={() => handleUpvote(rep.id)}

@@ -29,8 +29,10 @@ export default function NotificationsPage() {
   const [browserPermission, setBrowserPermission] = useState<NotificationPermission>('default');
   const [savedNotice, setSavedNotice] = useState(false);
   const [testSentNotice, setTestSentNotice] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     // Check Notification API support & status
     if (typeof window !== 'undefined' && 'Notification' in window) {
       setBrowserPermission(Notification.permission);
@@ -129,6 +131,22 @@ export default function NotificationsPage() {
   };
 
   const unreadCount = alerts.filter((a) => !a.read).length;
+
+  // Hydration-safe local timestamp formatter
+  const formatAlertTime = (timestamp?: string): string => {
+    if (!isMounted || !timestamp) {
+      return '--:--';
+    }
+    try {
+      const date = new Date(timestamp);
+      if (isNaN(date.getTime())) {
+        return '--:--';
+      }
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return '--:--';
+    }
+  };
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -466,7 +484,7 @@ export default function NotificationsPage() {
 
                   <div className="text-right shrink-0">
                     <span className="text-[10px] text-[#97A7B6] block">
-                      {new Date(alert.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {formatAlertTime(alert.timestamp)}
                     </span>
                     {!alert.read && (
                       <span className="inline-block mt-1 w-2 h-2 rounded-full bg-[#4BA9FF]" title="Unread" />

@@ -31,6 +31,7 @@ export default function SustainabilityPage() {
   const [challenges, setChallenges] = useState<GreenChallenge[]>(INITIAL_CHALLENGES);
   const [activeTab, setActiveTab] = useState<'tracker' | 'challenges'>('tracker');
   const [showModal, setShowModal] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   // New Action Form State
   const [actionType, setActionType] = useState<EcoAction['type']>('public_transit');
@@ -46,6 +47,7 @@ export default function SustainabilityPage() {
   }, []);
 
   useEffect(() => {
+    setIsMounted(true);
     try {
       const stored = localStorage.getItem('airwise_eco_actions') || localStorage.getItem('airwise_sustainability_actions');
       if (stored) {
@@ -352,7 +354,7 @@ export default function SustainabilityPage() {
                       +{act.ecoPoints} Pts
                     </span>
                     <span className="text-[9.5px] text-[#97A7B6]">
-                      {new Date(act.timestamp).toLocaleDateString()}
+                      {isMounted ? new Date(act.timestamp).toLocaleDateString() : '--/--/----'}
                     </span>
                   </div>
                 </div>

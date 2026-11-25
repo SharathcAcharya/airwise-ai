@@ -29,8 +29,10 @@ export default function InsightsPage() {
   const [airData, setAirData] = useState<AirQualityResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [prefs, setPrefs] = useState<UserPreferences>(DEFAULT_PREFERENCES);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     try {
       const stored = localStorage.getItem('airwise_user_preferences');
       if (stored) {
@@ -164,7 +166,7 @@ export default function InsightsPage() {
           </div>
           <div className="text-right text-xs text-gray-700">
             <p><strong>Location:</strong> {currentLocation.name}</p>
-            <p><strong>Generated:</strong> {new Date().toLocaleDateString()} {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+            <p><strong>Generated:</strong> {isMounted ? `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '--/--/---- --:--'}</p>
           </div>
         </div>
       </div>
